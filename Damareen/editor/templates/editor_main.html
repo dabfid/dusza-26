@@ -1,0 +1,41 @@
+{% extends "main.html" %} {% load static %} {% block content %}
+<div class="container">
+  <div class="pixel-corner pixel-corner-tl"></div>
+  <div class="pixel-corner pixel-corner-tr"></div>
+  <div class="pixel-corner pixel-corner-bl"></div>
+  <div class="pixel-corner pixel-corner-br"></div>
+
+  <h1 class="title">
+    <img class="minikep" src="{% static 'kepek/szivecske.png' %}" alt="" />
+    DAMAREEN
+    <img class="minikep" src="{% static 'kepek/harcrafel.png' %}" alt="" />
+  </h1>
+
+  <h2 class="mentes">Mentések:</h2>
+  {% for save in saves %}
+  <a
+    href="/load/{{ save.id }}/"
+    class="game-container save-box"
+    role="button"
+    aria-label="Load game {{ save.id }}"
+    tabindex="0"
+  >
+    <div class="pixel-corner pixel-corner-tl"></div>
+    <div class="pixel-corner pixel-corner-tr"></div>
+    <div class="pixel-corner pixel-corner-bl"></div>
+    <div class="pixel-corner pixel-corner-br"></div>
+
+    <div class="save-content">
+      <div class="game-id">ID: {{ save.id }}</div>
+      <div class="game-date">Legutóbbi mentés: {{ save.datum }}</div>
+    </div>
+  </a>
+  {% empty %}
+  <h3 class="mentes">Még nem játszott egy játékkal sem.</h3>
+  {% endfor %}
+
+  <button class="btn newgame-btn" onclick="window.location.href='/newgame/'">
+    ÚJ JÁTÉK
+  </button>
+</div>
+{% endblock %}

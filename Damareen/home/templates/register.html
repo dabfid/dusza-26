@@ -1,0 +1,170 @@
+{% extends "main.html" %}{% load static %} {% block content %}
+<div class="container">
+  <div class="pixel-corner pixel-corner-tl"></div>
+  <div class="pixel-corner pixel-corner-tr"></div>
+  <div class="pixel-corner pixel-corner-bl"></div>
+  <div class="pixel-corner pixel-corner-br"></div>
+
+  <h1 class="title">REGISZTRÁCIÓ</h1>
+
+  <div class="kozep">
+    <a href="{% url 'homepage' %}">
+      <img
+        src="{% static 'kepek/backarrow.png' %}"
+        alt="Vissza"
+        class="back-arrow"
+      />
+    </a>
+  </div>
+
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <div><p class="messages">{{ message }}</p></div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form id="pixelForm" action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="username">FELHASZNÁLÓNÉV:</label>
+      <div class="input-wrapper">
+        <input
+          name="username"
+          type="text"
+          id="username"
+          class="input-box"
+          autocomplete="off"
+        />
+        <div class="focus-effect"></div>
+      </div>
+      <div class="error-message" id="username-error"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">JELSZÓ:</label>
+      <div class="input-wrapper">
+        <input
+          name="password"
+          type="password"
+          id="password"
+          class="input-box"
+          autocomplete="off"
+        />
+        <div class="focus-effect"></div>
+      </div>
+      <div class="error-message" id="password-error"></div>
+    </div>
+
+    <button type="submit" id="submitBtn">REGISZTRÁCIÓ</button>
+  </form>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Show error with retro animation
+    function showError(element, errorElement, message) {
+      element.classList.add("input-error");
+      errorElement.textContent = message;
+      errorElement.style.opacity = "1";
+
+      playSound("error");
+
+      setTimeout(() => {
+        element.classList.remove("input-error");
+      }, 500);
+    }
+
+    // Reset error
+    function resetError(errorElement) {
+      errorElement.style.opacity = "0";
+    }
+
+    // Validate the form
+    function validateForm() {
+      let isValid = true;
+
+      // Reset errors
+      resetError(usernameError);
+      resetError(emailError);
+      resetError(passwordError);
+      resetError(starshipError);
+
+      // Validate username
+      if (usernameInput.value.trim() === "") {
+        showError(usernameInput, usernameError, "PILOT NAME REQUIRED!");
+        isValid = false;
+      } else if (usernameInput.value.length < 3) {
+        showError(usernameInput, usernameError, "NAME TOO SHORT!");
+        isValid = false;
+      }
+
+      // Validate email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailInput.value.trim() === "") {
+        showError(emailInput, emailError, "COMM CHANNEL REQUIRED!");
+        isValid = false;
+      } else if (!emailRegex.test(emailInput.value)) {
+        showError(emailInput, emailError, "INVALID CHANNEL FORMAT!");
+        isValid = false;
+      }
+
+      // Validate password
+      if (passwordInput.value.trim() === "") {
+        showError(passwordInput, passwordError, "SECRET CODE REQUIRED!");
+        isValid = false;
+      } else if (passwordInput.value.length < 6) {
+        showError(passwordInput, passwordError, "CODE TOO WEAK!");
+        isValid = false;
+      }
+
+      // Validate starship
+      if (starshipInput.value === "") {
+        showError(starshipInput, starshipError, "SELECT YOUR VESSEL!");
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // Form submission
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      playSound("click");
+
+      if (validateForm()) {
+        // Show loader
+        submitBtn.style.display = "none";
+        loader.style.display = "block";
+
+        // Simulate form submission
+        setTimeout(() => {
+          loader.style.display = "none";
+          successMessage.classList.add("show");
+          playSound("success");
+        }, 1500);
+      }
+    });
+
+    // Restart button
+    restartBtn.addEventListener("click", function () {
+      playSound("click");
+      successMessage.classList.remove("show");
+      form.reset();
+      submitBtn.style.display = "block";
+    });
+
+    // Input effects
+    const inputs = document.querySelectorAll(".input-box");
+
+    inputs.forEach((input) => {
+      input.addEventListener("focus", function () {
+        playSound("click");
+      });
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+{% load static %}
+{% block content %}
+ <div class="container">
+        <div class="pixel-corner pixel-corner-tl"></div>
+        <div class="pixel-corner pixel-corner-tr"></div>
+        <div class="pixel-corner pixel-corner-bl"></div>
+        <div class="pixel-corner pixel-corner-br"></div>
+        
+        <h1 class="title"><img class="minikep"  src="{% static 'kepek/szivecske.png' %}" alt="">  DAMAREEN <img class="minikep"  src="{% static 'kepek/harcrafel.png' %}" alt=""></h1>
+        
+           {% if logged %}
+            <button onclick="window.location.href='game/'" type="submit" id="submitBtn">HARCRA FEL! </button>
+            <button onclick="window.location.href='editor/'" type="submit" id="submitBtn">JÁTÉKMESTER MÓD</button>
+            <button onclick="window.location.href='logout/'" type="submit" id="submitBtn">KIJELENTKEZÉS</button>
+            {% else %}
+            <button onclick="window.location.href='login/'" type="submit" id="submitBtn">BEJELENTKEZÉS</button>
+            <button onclick="window.location.href='register/'" type="submit" id="submitBtn">REGISZTRÁCIÓ</button>
+            {% endif %}
+       
+    </div>
+    
+{% endblock %}
+
+
+
