@@ -41,6 +41,7 @@ class Profile(models.Model):
 
 
 class Worlds(models.Model):
+    name = models.CharField(max_length=64)
     creator_id = models.ForeignKey(User, on_delete=models.CASCADE)
     collection_cards  = models.TextField()
     world_cards   = models.TextField()
