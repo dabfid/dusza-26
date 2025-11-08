@@ -21,7 +21,7 @@ function loadCardData(cardData) {
     }
   }
 }
-
+// TODO save kazamatak, load kazamatak as images instead of div
 function loadChallengeData(challengeData) {}
 
 if (world) {

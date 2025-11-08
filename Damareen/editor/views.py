@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from home.models import Worlds
@@ -28,7 +29,7 @@ def editor(request, id):
   
   image_urls = [[static(path) for path in pair] for pair in images]
 
-  return render(request, "editor.html", {"world": world, "image_urls": image_urls})
+  return render(request, "editor.html", {"world": world, "image_urls": json.dumps(image_urls)})
 
 @login_required(login_url='login')
 def delete(request, world_id):

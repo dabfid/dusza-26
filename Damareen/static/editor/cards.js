@@ -10,7 +10,9 @@ const newCardHpInput = document.querySelector("#new-card-hp");
 const newCardDmgInput = document.querySelector("#new-card-dmg");
 const newCardTypeSelect = document.querySelector("#new-card-type");
 
-const imageUrls = document.querySelector("#url-data").dataset.imageUrls;
+const imageUrls = JSON.parse(
+  document.querySelector("#url-data").dataset.imageUrls
+);
 
 let cardNames = [];
 
@@ -33,11 +35,16 @@ newCardButton.addEventListener("click", () => {
 
   cardNames.push(newCardName);
 
+  const backgroundImageIndex = Math.floor(
+    Math.random() * imageUrls[newCardTypeSelect.value].length
+  );
+
   createCardElement({
     cardName: newCardName,
     cardHp: newCardHpInput.value,
     cardDmg: newCardDmgInput.value,
     cardType: newCardTypeSelect.value,
+    cardBackgroundImageIndex: backgroundImageIndex,
   });
 
   newCardNameInput.value = "";
@@ -61,21 +68,15 @@ export function createCardElement(cardData) {
   newCard.dataset.cardHp = cardData.cardHp;
   newCard.dataset.cardDmg = cardData.cardDmg;
   newCard.dataset.cardType = cardData.cardType;
+  newCard.dataset.cardBackgroundImageIndex = cardData.cardBackgroundImageIndex;
   newCard.className = "card";
 
   const background = document.createElement("img");
   background.className = "card-background";
-  // TODO: imageurls is string either convert it or get it as array
-  const backgroundImageIndex = Math.floor(
-    Math.random() * imageUrls[cardData.cardType].length
-  );
-  console.log(imageUrls);
-  console.log(Math.floor(Math.random() * imageUrls[cardData.cardType].length));
-  background.src = imageUrls[cardData.cardType][backgroundImageIndex];
-  console.log(backgroundImageIndex);
-  newCard.appendChild(background);
 
-  newCard.dataset.cardBackgroundImageIndex = backgroundImageIndex;
+  background.src =
+    imageUrls[cardData.cardType][cardData.cardBackgroundImageIndex];
+  newCard.appendChild(background);
 
   const deleteButton = document.createElement("a");
   deleteButton.className = "card-delete";
