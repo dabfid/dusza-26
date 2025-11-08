@@ -24,7 +24,6 @@
         />
         <div class="focus-effect"></div>
       </div>
-      <div class="error-message" id="username-error"></div>
     </div>
 
     <div class="form-group">
@@ -39,116 +38,9 @@
         />
         <div class="focus-effect"></div>
       </div>
-      <div class="error-message" id="password-error"></div>
     </div>
 
     <button type="submit" id="submitBtn">BEJELENTKEZÉS</button>
   </form>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Show error with retro animation
-    function showError(element, errorElement, message) {
-      element.classList.add("input-error");
-      errorElement.textContent = message;
-      errorElement.style.opacity = "1";
-
-      playSound("error");
-
-      setTimeout(() => {
-        element.classList.remove("input-error");
-      }, 500);
-    }
-
-    // Reset error
-    function resetError(errorElement) {
-      errorElement.style.opacity = "0";
-    }
-
-    // Validate the form
-    function validateForm() {
-      let isValid = true;
-
-      // Reset errors
-      resetError(usernameError);
-      resetError(emailError);
-      resetError(passwordError);
-      resetError(starshipError);
-
-      // Validate username
-      if (usernameInput.value.trim() === "") {
-        showError(usernameInput, usernameError, "PILOT NAME REQUIRED!");
-        isValid = false;
-      } else if (usernameInput.value.length < 3) {
-        showError(usernameInput, usernameError, "NAME TOO SHORT!");
-        isValid = false;
-      }
-
-      // Validate email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (emailInput.value.trim() === "") {
-        showError(emailInput, emailError, "COMM CHANNEL REQUIRED!");
-        isValid = false;
-      } else if (!emailRegex.test(emailInput.value)) {
-        showError(emailInput, emailError, "INVALID CHANNEL FORMAT!");
-        isValid = false;
-      }
-
-      // Validate password
-      if (passwordInput.value.trim() === "") {
-        showError(passwordInput, passwordError, "SECRET CODE REQUIRED!");
-        isValid = false;
-      } else if (passwordInput.value.length < 6) {
-        showError(passwordInput, passwordError, "CODE TOO WEAK!");
-        isValid = false;
-      }
-
-      // Validate starship
-      if (starshipInput.value === "") {
-        showError(starshipInput, starshipError, "SELECT YOUR VESSEL!");
-        isValid = false;
-      }
-
-      return isValid;
-    }
-
-    // Form submission
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      playSound("click");
-
-      if (validateForm()) {
-        // Show loader
-        submitBtn.style.display = "none";
-        loader.style.display = "block";
-
-        // Simulate form submission
-        setTimeout(() => {
-          loader.style.display = "none";
-          successMessage.classList.add("show");
-          playSound("success");
-        }, 1500);
-      }
-    });
-
-    // Restart button
-    restartBtn.addEventListener("click", function () {
-      playSound("click");
-      successMessage.classList.remove("show");
-      form.reset();
-      submitBtn.style.display = "block";
-    });
-
-    // Input effects
-    const inputs = document.querySelectorAll(".input-box");
-
-    inputs.forEach((input) => {
-      input.addEventListener("focus", function () {
-        playSound("click");
-      });
-    });
-  });
-</script>
 {% endblock %}

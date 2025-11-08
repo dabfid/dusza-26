@@ -6,7 +6,8 @@
   
   <div class="saves-list">
     {% for save in saves %}
-    <div class="game-container save-box">
+    <a href="#">
+      <div class="game-container save-box">
       <div class="save-content">
         <div class="save-info">
           <div class="game-id">ID: {{ save.id }}</div>
@@ -17,6 +18,7 @@
         </a>
       </div>
     </div>
+    </a>
     {% empty %}
     <h3 class="mentes">Még nem játszott egy játékkal sem.</h3>
     {% endfor %}
