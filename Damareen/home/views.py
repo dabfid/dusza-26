@@ -2,24 +2,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.contrib.auth.models import User
+from .models import Characters
+from django.templatetags.static import static
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 
-
-# Create your views here.
 def homepage(request):
     logged = False
     if request.user.is_authenticated:
         logged = True
     return render(request, 'homepage.html', {'logged': logged})
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login
-from django.contrib import messages
-from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from django.db import IntegrityError
-
-# ...existing code...
 
 def login(request):
     if request.user.is_authenticated:

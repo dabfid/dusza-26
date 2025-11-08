@@ -1,0 +1,26 @@
+{% extends "main.html" %} {% load static %} {% block content %}
+<div class="container">
+  <div class="pixel-corner pixel-corner-tl"></div>
+  <div class="pixel-corner pixel-corner-tr"></div>
+  <div class="pixel-corner pixel-corner-bl"></div>
+  <div class="pixel-corner pixel-corner-br"></div>
+
+  <div class="arrow-container">
+    <a href="/">
+      <img
+        src="{% static 'kepek/nyilacska.png' %}"
+        alt="Vissza"
+        class="back-arrow-inner"
+      />
+    </a>
+  </div>
+  
+  <h1 class="title">
+      <img class="minikep" src="{% static 'kepek/szivecske.png' %}" alt="" />
+      <span class="title-text">{% block title %}{% endblock %}</span>
+      <img class="minikep" src="{% static 'kepek/harcrafel.png' %}" alt="" />
+  </h1>
+
+  {% block tobbi_content %}{% endblock %}
+</div>
+{% endblock %}

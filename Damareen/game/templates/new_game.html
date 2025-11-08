@@ -1,36 +1,27 @@
-{% extends "main.html" %} {% load static %} {% block content %}
-<div class="container">
-  <div class="pixel-corner pixel-corner-tl"></div>
-  <div class="pixel-corner pixel-corner-tr"></div>
-  <div class="pixel-corner pixel-corner-bl"></div>
-  <div class="pixel-corner pixel-corner-br"></div>
+{% extends "visszanyil.html" %}
+{% load static %}
 
-  <h1 class="title">
-    <img class="minikep" src="{% static 'kepek/szivecske.png' %}" alt="" />
-    DAMAREEN
-    <img class="minikep" src="{% static 'kepek/harcrafel.png' %}" alt="" />
-  </h1>
+{% block title %}
+ÚJ JÁTÉK
+{% endblock %}
 
-  <h2 class="mentes">Világok:</h2>
-  {% for world in worlds %}
-  <a href="{% url 'play' world.id %}">
-    <div class="game-container save-box">
-      <div class="pixel-corner pixel-corner-tl"></div>
-      <div class="pixel-corner pixel-corner-tr"></div>
-      <div class="pixel-corner pixel-corner-bl"></div>
-      <div class="pixel-corner pixel-corner-br"></div>
+{% block tobbi_content %}
+<h2 class="mentes">Világok:</h2>
+{% for world in worlds %}
+<a href="{% url 'play' world.id %}">
+  <div class="game-container save-box">
+    <div class="pixel-corner pixel-corner-tl"></div>
+    <div class="pixel-corner pixel-corner-tr"></div>
+    <div class="pixel-corner pixel-corner-bl"></div>
+    <div class="pixel-corner pixel-corner-br"></div>
 
-      <div class="save-content">
-        <div class="game-id">Világ neve: {{ world.name }}</div>
-        <div class="game-creator">
-          Létrehozó: {{ world.creator_id.username }}
-        </div>
-      </div>
+    <div class="save-content">
+      <div class="game-id">Világ neve: {{ world.name }}</div>
+      <div class="game-creator">Létrehozó: {{ world.creator_id.username }}</div>
     </div>
-  </a>
-  {% empty %}
-  <h3 class="mentes">Még nincsenek mások által létrehozott világok.</h3>
-  {% endfor %}
-
-</div>
+  </div>
+</a>
+{% empty %}
+<h3 class="mentes">Még nincsenek mások által létrehozott világok.</h3>
+{% endfor %}
 {% endblock %}

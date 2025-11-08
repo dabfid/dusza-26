@@ -1,10 +1,14 @@
-const diffButton = document.querySelector(".diff-button");
+const newChallengeButton = document.querySelector(".diff-button");
 const deleteButtons = document.querySelectorAll(".delete-button");
 
 const challengesTab = document.querySelector("#challenges");
 const difficultySelector = document.querySelector("#diff-type");
 
-const deckCardContainer = document.querySelector("#deck .card-container");
+const bossNameInput = document.querySelector("#boss-name-input");
+
+const worldCardContainer = document.querySelector(
+  "#world_cards .card-container"
+);
 
 let selectedCards = {};
 
@@ -14,38 +18,59 @@ const getFromDiff = {
   2: 6,
 };
 
-function setActiveButton(activeBtn, inactiveBtn) {
-  activeBtn.classList.add("active-buff");
-  inactiveBtn.classList.remove("active-buff");
+function applyBuff(boss, buff) {
+  boss.classList.add("buff-card");
+  boss.classList.add("card");
+  boss.classList.remove("card-small");
+  boss.dataset.cardName = bossNameInput.value;
+  if (buff === 1) {
+    boss.dataset.cardHp = parseInt(boss.dataset.cardHp) * 2;
+  } else if (buff === 2) {
+    boss.dataset.cardDmg = parseInt(boss.dataset.cardDmg) * 2;
+  }
 }
 
-diffButton.addEventListener("click", async () => {
+function setActiveButton(thisBtn, otherBtn) {
+  thisBtn.classList.add("active-buff");
+  otherBtn.classList.remove("active-buff");
+}
+
+newChallengeButton.addEventListener("click", async () => {
   selectedCards = {};
-  diffButton.removeEventListener("click", this);
+  newChallengeButton.removeEventListener("click", this);
 
   const selectedDifficulty = difficultySelector.value;
 
-  const cardSelector = deckCardContainer.cloneNode(true);
+  const cardSelector = worldCardContainer.cloneNode(true);
   const availableCards = cardSelector.querySelectorAll(".card");
 
   if (availableCards.length < getFromDiff[selectedDifficulty]) {
-    alert("Nincs elég kártya a pakliban a kiválasztott nehézségi szinthez!");
-    diffButton.addEventListener("click", this);
+    alert("Nincs elég kártya a világban a kiválasztott nehézségi szinthez!");
+    newChallengeButton.addEventListener("click", this);
     return;
   }
 
+  if (selectedDifficulty != 0) {
+    if (bossNameInput.value.trim() === "") {
+      alert("Kérlek add meg a vezér nevét!");
+      newChallengeButton.addEventListener("click", this);
+      return;
+    }
+  }
+
+  availableCards.forEach((card) => card.childNodes[0].remove());
+
   availableCards.forEach((card) => {
-    card.classList.remove("active-card");
     card.addEventListener("click", () => {
-      const cardId = card.dataset.cardId;
+      const cardName = card.dataset.cardName;
       if (card.classList.contains("active-card")) {
         card.classList.remove("active-card");
 
-        delete selectedCards[cardId];
+        delete selectedCards[cardName];
       } else {
         card.classList.add("active-card");
 
-        selectedCards[cardId] = card;
+        selectedCards[cardName] = card;
       }
     });
   });
@@ -61,7 +86,7 @@ diffButton.addEventListener("click", async () => {
     buffDefButton = document.createElement("a");
     buffAttButton = document.createElement("a");
 
-    buffDefButton.className = "button buff-def-button";
+    buffDefButton.className = "button buff-def-button active-buff";
     buffDefButton.textContent = "Def ^";
     buffAttButton.className = "button buff-att-button";
     buffAttButton.textContent = "Att ^";
@@ -94,7 +119,7 @@ diffButton.addEventListener("click", async () => {
   let buff = 0;
 
   if (selectedDifficulty != 0) {
-    if (buffDefButton.classList.contains("active-buff-button")) {
+    if (buffDefButton.classList.contains("active-buff")) {
       buff = 1;
     } else {
       buff = 2;
@@ -109,7 +134,7 @@ diffButton.addEventListener("click", async () => {
     buffAttButton.remove();
   }
 
-  diffButton.addEventListener("click", this);
+  newChallengeButton.addEventListener("click", this);
 });
 
 deleteButtons.forEach((btn) => {
@@ -118,27 +143,43 @@ deleteButtons.forEach((btn) => {
   });
 });
 
-function createKazameta(parent, difficulty, buff, cards) {
+export function createKazameta(parent, difficulty, buff, cards) {
+  let newCards = [];
   const wrap = document.createElement("div");
   wrap.className = "kazameta-wrap";
-  wrap.dataset.buff = buff;
   wrap.dataset.difficulty = difficulty;
 
   const container = document.createElement("div");
   container.className = "kazameta-container";
 
-  if (typeof cards === "object") {
-    Object.values(cards).forEach((card) => {
-      const newCard = card.cloneNode(true);
+  if (cards instanceof HTMLElement) {
+    const newCard = cards.cloneNode(true);
+    container.appendChild(newCard);
+    newCard.className = "card-small";
+  } else if (Array.isArray(cards) && typeof cards[0] === "string") {
+    cards.forEach((id) => {
+      const newCard = document
+        .querySelector(`#world_cards .card[data-card-id="${id}"]`)
+        .cloneNode(true);
       container.appendChild(newCard);
       newCard.className = "card-small";
+      newCards.push(newCard);
     });
+    if (difficulty !== "0") {
+      const boss = newCards[newCards.length - 1];
+      applyBuff(boss, buff);
+    }
   } else {
-    cards.forEach((card) => {
+    Array.from(Object.values(cards)).forEach((card) => {
       const newCard = card.cloneNode(true);
       container.appendChild(newCard);
       newCard.className = "card-small";
+      newCards.push(newCard);
     });
+    if (difficulty !== "0") {
+      const boss = newCards[newCards.length - 1];
+      applyBuff(boss, buff);
+    }
   }
 
   const deleteButton = document.createElement("a");
@@ -157,15 +198,14 @@ function createKazameta(parent, difficulty, buff, cards) {
 }
 
 export function gatherChallengeData() {
-  let activeChallenges = [];
+  let challenges = [];
   const challengeWraps = document.querySelectorAll(".kazameta-wrap");
   challengeWraps.forEach((wrap) => {
-    const difficulty = wrap.dataset.difficulty;
-    const buff = wrap.dataset.buff;
-    const cards = Array.from(wrap.querySelectorAll(".card-small")).map(
-      (card) => card.dataset.cardId
-    );
-    activeChallenges.push({ difficulty, buff, cards });
+    let cards = [];
+    Array.from(wrap.querySelectorAll("div")).forEach((card) => {
+      cards.push({ ...card.dataset });
+    });
+    challenges.push({ ...wrap.dataset, ...cards });
   });
-  return activeChallenges;
+  return challenges;
 }

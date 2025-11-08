@@ -1,39 +1,26 @@
-{% extends "main.html" %} {% load static %} {% block content %}
-<div class="container">
-  <div class="pixel-corner pixel-corner-tl"></div>
-  <div class="pixel-corner pixel-corner-tr"></div>
-  <div class="pixel-corner pixel-corner-bl"></div>
-  <div class="pixel-corner pixel-corner-br"></div>
+{% extends "visszanyil.html" %} {% load static %} {% block title %}DAMAREEN{% endblock %}{% block tobbi_content %}
 
-  <h1 class="title">
-    <img class="minikep" src="{% static 'kepek/szivecske.png' %}" alt="" />
-    DAMAREEN
-    <img class="minikep" src="{% static 'kepek/harcrafel.png' %}" alt="" />
-  </h1>
 
-  <h2 class="mentes">Mentések:</h2>
-  {% for save in saves %}
-  <div class="game-container save-box">
-    <div class="pixel-corner pixel-corner-tl"></div>
-    <div class="pixel-corner pixel-corner-tr"></div>
-    <div class="pixel-corner pixel-corner-bl"></div>
-    <div class="pixel-corner pixel-corner-br"></div>
+<h2 class="mentes">Mentések</h2>
 
-    <div class="save-content">
-      <div class="game-id">ID: {{ save.id }}</div>
-      <div class="game-date">Legutóbbi mentés: {{ save.datum }}</div>
-      <a href="{% url 'delete' save.id %}">
-        <img
-          src="{% static 'kepek/kuka.png' %}"
-          alt="Törlés"
-          class="delete-icon"
-        />
-      </a>
+  
+  <div class="saves-list">
+    {% for save in saves %}
+    <div class="game-container save-box">
+      <div class="save-content">
+        <div class="save-info">
+          <div class="game-id">ID: {{ save.id }}</div>
+          <div class="game-date">{{ save.datum }}</div>
+        </div>
+        <a href="{% url 'delete' save.id %}" class="delete-link" aria-label="Törlés">
+          <img src="{% static 'kepek/kuka.png' %}" alt="Törlés" class="delete-icon" />
+        </a>
+      </div>
     </div>
+    {% empty %}
+    <h3 class="mentes">Még nem játszott egy játékkal sem.</h3>
+    {% endfor %}
   </div>
-  {% empty %}
-  <h3 class="mentes">Még nem játszott egy játékkal sem.</h3>
-  {% endfor %}
 
   <button class="btn newgame-btn" onclick="window.location.href='new/'">
     ÚJ JÁTÉK

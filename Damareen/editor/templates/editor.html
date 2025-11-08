@@ -9,26 +9,32 @@
   </head>
 
   <body>
-    <a class="button done-button" id="done-button" data-tab="challenges"
-      >Kész</a
+    {{ image_urls}}
+    <a
+      href="{% url 'index' %}"
+      class="no-deco button back-button"
+      id="back-button"
+      >Vissza</a
     >
-    <textarea name="name" id="name">Pályanév:</textarea>
+    <a class="button done-button" id="done-button">Kész</a>
+    <input type="text" placeholder="Pályanév" id="world-name" />
     <div class="nav">
       <a class="tab-button active" data-tab="world_cards">Világkártyák</a>
       <a class="tab-button" data-tab="deck">Gyüjtemény</a>
       <a class="tab-button" data-tab="challenges">Kazamaták</a>
     </div>
     <div class="tab-content" id="world_cards">
-      <div class="card-container">
-        <div class="card" data-card-id="1"></div>
-        <div class="card" data-card-id="2"></div>
-        <div class="card" data-card-id="3"></div>
-        <div class="card" data-card-id="4"></div>
-        <div class="card" data-card-id="5"></div>
-        <div class="card" data-card-id="6"></div>
-        <div class="card" data-card-id="7"></div>
-        <div class="card" data-card-id="8"></div>
-      </div>
+      <a class="button new-card-button" id="new-card-button">Új kártya</a>
+      <input type="text" name="new-card-name" id="new-card-name" />
+      <input type="number" name="new-card-dmg" id="new-card-dmg" />
+      <input type="number" name="new-card-hp" id="new-card-hp" />
+      <select name="new-card-type" id="new-card-type">
+        <option value="0">Föld</option>
+        <option value="1">Víz</option>
+        <option value="2">Tűz</option>
+        <option value="3">Levegő</option>
+      </select>
+      <div class="card-container"></div>
     </div>
     <div class="tab-content hidden" id="deck">
       <div class="card-container"></div>
@@ -41,10 +47,28 @@
           <option value="2">Nagy kazamata</option>
         </select>
         <a class="button diff-button">Új kazamata</a>
+        <input type="text" name="boss-name-input" id="boss-name-input" />
       </div>
     </div>
+    {% if world %}
+    <div
+      style="display: none"
+      data-world-id="{{ world.id }}"
+      data-world-name="{{ world.name }}"
+      data-level-data="{{ world.level_data }}"
+      id="world"
+    ></div>
+    {% endif %} {% if image_urls %}
+    <div
+      style="display: none"
+      data-image-urls="{{ image_urls|safe }}"
+      id="url-data"
+    ></div>
+    {% endif %}
     <script type="module" src="{% static 'editor/cards.js' %}"></script>
     <script type="module" src="{% static 'editor/challenges.js' %}"></script>
     <script type="module" src="{% static 'editor/network.js' %}"></script>
+    <script type="module" src="{% static 'editor/nav.js' %}"></script>
+    <script type="module" src="{% static 'editor/load.js' %}"></script>
   </body>
 </html>

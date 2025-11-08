@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Born2bSporty FS';
+    src: url('fonts/subset-Born2bSportyFS.woff2') format('woff2'),
+        url('fonts/subset-Born2bSportyFS.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
