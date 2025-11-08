@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from home.models import Saves, Profile
+from home.models import Saves, Worlds
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -19,3 +19,13 @@ def delete(request, save_id):
     except Saves.DoesNotExist:
         messages.error(request, 'A mentés nem található vagy nincs jogosultságod a törléséhez.')
     return redirect('main')
+
+
+@login_required(login_url='login')
+def new_game(request):
+    world_list = Worlds.objects.all()
+    return render(request, 'new_game.html', {'worlds': world_list})
+
+@login_required(login_url='login')
+def play(request, world_id):
+    return render(request, 'play.html', {'world_id': world_id})
