@@ -129,11 +129,20 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# HTTPS/SSL Settings
-SECURE_SSL_REDIRECT = False  # Apache handles this
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = False  # apache intézi
+
+# CSRF megbízható források (csak HTTPS)
+CSRF_TRUSTED_ORIGINS = [
+    'https://dusza.jedlik.net',
+    'https://20.52.24.33',
+]
+
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "same-origin"
+X_FRAME_OPTIONS = "DENY"
 
 # Logging
 LOGGING = {
@@ -165,13 +174,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': BASE_DIR / 'logs' / 'django.log',
-            'formatter': 'verbose',
-        },
-        'error_file': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs' / 'django_errors.log',
-            'formatter': 'verbose',
+            'formatter': 'simple',
         },
     },
     'loggers': {
@@ -181,14 +184,18 @@ LOGGING = {
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['error_file'],
-            'level': 'ERROR',
+            'handlers': ['file'],
+            'level': 'INFO',
             'propagate': False,
         },
         'django.db.backends': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False,
+        },
+        '': {
+            'handlers': ['console', 'file'],
+            'level': 'WARNING',
         },
     },
 }
