@@ -30,7 +30,7 @@ class Characters(models.Model):
 
 
 class Saves(models.Model):
-    world_id   = models.ForeignKey("Worlds", on_delete=models.CASCADE)
+    world   = models.ForeignKey("Worlds", on_delete=models.CASCADE)
     save_data  = models.TextField()
     datum = models.DateTimeField(auto_now_add=True)
     profile = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -42,7 +42,7 @@ class Profile(models.Model):
 
 class Worlds(models.Model):
     name = models.CharField(max_length=64)
-    creator_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
     collection_cards  = models.TextField()
     world_cards   = models.TextField()
     challenges  = models.TextField()

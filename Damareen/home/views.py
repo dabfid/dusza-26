@@ -22,6 +22,8 @@ from django.db import IntegrityError
 # ...existing code...
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('homepage')
     if request.method == 'POST':
         try:
             username = request.POST.get('username')
