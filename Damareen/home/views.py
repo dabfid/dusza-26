@@ -44,9 +44,10 @@ def register(request):
         try:
             username = request.POST.get('username')
             password = request.POST.get('password')
+            password_confirm = request.POST.get('password_confirm')
 
             # Alapvető validációk
-            if not username or not password:
+            if not username or not password or not password_confirm:
                 messages.error(request, 'Minden mezö kitöltése kötelezö!')
                 return render(request, 'register.html')
 
@@ -56,6 +57,10 @@ def register(request):
 
             if len(password) < 6:
                 messages.error(request, 'A jelszó túl rövid (min. 6 karakter)!')
+                return render(request, 'register.html')
+            
+            if password != password_confirm:
+                messages.error(request, 'A jelszavak nem egyeznek!')
                 return render(request, 'register.html')
 
             # Felhasználó létrehozása
