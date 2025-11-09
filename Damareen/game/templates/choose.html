@@ -1,16 +1,30 @@
-{% extends "visszanyil.html" %} {% load static %} {% block title %}
-<h2>Válassz karaktert</h2>
-{% endblock %} {% block tobbi_content %}
+{% extends "visszanyil.html" %}
+{% load static %}
 
-<link rel="stylesheet" href="{% static 'game/cards.css' %}" />
+{% block title %}
+<h2>Válassz kártyákat!</h2>
+{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'editor/editor.css' %}" />
+{% endblock %}
+{% block back_url %}
+{% url 'new_game' %}
+{% endblock %}
+{% block tobbi_content %}
 
 {% if messages %}
 <div class="messages">
   {% for message in messages %}
-  <div><p class="messages">{{ message }}</p></div>
+  <div>
+    <p class="messages">{{ message }}</p>
+  </div>
   {% endfor %}
 </div>
 {% endif %}
+
+<div id="selected_count" style="text-align: center; margin-bottom: 20px">
+  Kiválasztva: 0
+</div>
 
 <form id="choose-form" method="post">
   {% csrf_token %}
@@ -18,15 +32,9 @@
 
   <div class="saves-list">
     {% for char in characters %}
-    <div
-      class="game-container save-box char-item card-data"
-      style="display: none"
-      data-name="{{ char.name }}"
-      data-type="{{ char.type }}"
-      data-dmg="{{ char.damage }}"
-      data-hp="{{ char.hp }}"
-      data-img="{{ char.imgIndex }}"
-    ></div>
+    <div class="game-container save-box char-item card-data" style="display: none" data-name="{{ char.name }}"
+      data-type="{{ char.type }}" data-dmg="{{ char.damage }}" data-hp="{{ char.hp }}" data-img="{{ char.imgIndex }}">
+    </div>
     <div class="card-container" id="card-container"></div>
     {% endfor %}
   </div>
@@ -35,27 +43,13 @@
     <button type="submit" class="btn disabled-button" id="submit-cards">
       Játék indítása
     </button>
-    <span id="selected_count" style="margin-left: 12px">Kiválasztva: 0</span>
   </div>
 </form>
 
 {% if image_urls %}
-<div
-  style="display: none"
-  data-image-urls="{{ image_urls }}"
-  id="url-data"
-></div>
+<div style="display: none" data-image-urls="{{ image_urls }}" id="url-data"></div>
 {% endif %}
-<div
-  style="display: none"
-  data-challenge-difficulty="{{ difficulty }}"
-  id="difficulty-data"
-></div>
-<div
-  style="display: none"
-  data-challenge-id="{{ selected_challenge }}"
-  id="selected-challenge-data"
-></div>
-
+<div style="display: none" data-challenge-difficulty="{{ difficulty }}" id="difficulty-data"></div>
+<div style="display: none" data-challenge-id="{{ selected_challenge }}" id="selected-challenge-data"></div>
 <script src="{% static 'game/choose_cards.js' %}"></script>
 {% endblock %}

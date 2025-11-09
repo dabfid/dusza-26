@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.templatetags.static import static
 from django.contrib import messages
 from home.utils import get_static_images
+from game.logic import isEnemyWinning
 import json
 import random
 
@@ -36,7 +37,7 @@ def new_game(request):
 
 
 @login_required(login_url='login')
-def play(request, world_id, character):
+def result(request, world_id):
     try:
         # Get world data
         world = Worlds.objects.get(id=world_id)
@@ -64,6 +65,7 @@ def play(request, world_id, character):
         # Get challenge data
         challenge_data = world_data.get('challengeData', [])
         
+        
         context = {
             'world_id': world_id,
             'character': selected_card,
@@ -84,24 +86,56 @@ def play(request, world_id, character):
 @login_required(login_url='login')
 def choose(request, world_id, difficulty):
     if request.method == 'POST':
-        # POST kezelés változatlan marad
-        print(request.POST)
-        raw_data = request.POST.get('cards', '[]')
+        # GET kérés: world_cards kiolvasása
+        #TODO add error handling
+        world_data = Worlds.objects.get(id=world_id).level_data
+        if not world_data:
+            pass
+        # fix malformed json
+        world_data = world_data.replace("'", '"')
+        world_data = json.loads(world_data)
+        
+        raw_data = request.POST.get('characters', '[]')
         try:
-            characters = json.loads(raw_data)
+            deck_data = json.loads(raw_data)
         except json.JSONDecodeError:
-            characters = []
-
-        if characters:
-            selected = characters[0]
-            return render(request, 'play.html', {
-                'world_id': world_id,
-                'selected_characters': characters,
-                'first_character': selected
-        })
-        else:
+            deck_data = []
+        if not deck_data:
             return redirect('choose', world_id=world_id, difficulty=difficulty)
 
+        cards = deck_data['cards']
+        selected_challenge = int(deck_data['challengeId'])
+        
+        challengeData = world_data.get('challengeData', [])
+        challenges = [];
+        for challenge in challengeData:
+            if int(challenge['difficulty']) == int(difficulty):
+                challenges.append(challenge)
+                
+        if not challenges: return redirect('choose', world_id=world_id, difficulty=difficulty)
+        selected_challenge = challenges[selected_challenge]
+        
+        wins = []
+        for card1, card2 in zip(cards, selected_challenge['cards']):
+            wins.append(isEnemyWinning(card1, card2))
+        
+        images = [
+            get_static_images('kepek/kartyak/dirt'),
+            get_static_images('kepek/kartyak/water'),
+            get_static_images('kepek/kartyak/fire'),
+            get_static_images('kepek/kartyak/air'),
+        ]
+        
+        image_urls = [[static(path) for path in pair] for pair in images]
+        
+        return render(request, 'result.html', {
+            'card_data': zip(cards, selected_challenge['cards'], wins),
+            'wins': wins,
+            'player_cards': cards,
+            'enemy_cards': selected_challenge['cards'],
+            "image_urls": json.dumps(image_urls),
+        })
+            
     else:
         # GET kérés: world_cards kiolvasása
         world_data = Worlds.objects.get(id=world_id).level_data
@@ -131,10 +165,10 @@ def choose(request, world_id, difficulty):
         challengeData = data.get('challengeData', [])
         challenges = [];
         for challenge in challengeData:
-            if challenge['difficulty'] == difficulty:
+            if int(challenge['difficulty']) == int(difficulty):
                 challenges.append(challenge)
 
-        selected_challenge = random.choice(challenges) if challenges else None
+        selected_challenge = random.randint(0, len(challenges) - 1) if challenges else None
 
         return render(request, 'choose.html', {
             'world_id': world_id,
@@ -151,3 +185,8 @@ def dif(request, world_id):
         difficulty = request.POST.get('difficulty')
         return redirect('choose', world_id=world_id, difficulty=difficulty)
     return render(request, 'difficulty.html', {'world_id': world_id})
+
+@login_required(login_url='login')
+def upgrade(request, world_id):
+    difficulty = 0
+    return render(request, 'upgrade.html', {'difficulty': difficulty})

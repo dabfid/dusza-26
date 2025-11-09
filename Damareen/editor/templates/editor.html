@@ -16,7 +16,7 @@
 <div class="form-group">
   <label for="world-name">Világod neve</label>
   <div class="input-wrapper">
-    <input type="text" placeholder="Pályanév" id="world-name" class="input-box" />
+    <input type="text" placeholder="Világ neve" id="world-name" class="input-box" required />
     <div class="focus-effect"></div>
   </div>
 </div>
@@ -27,7 +27,7 @@
   <a class="tab-button" data-tab="challenges">Kazamaták</a>
 </div>
 <div class="tab-content" id="world_cards">
-  <div class="new-card-form-container">
+  <div class="horizontal-form">
 
     <div class="form-group">
       <label for="new-card-name">Kártya neve</label>
@@ -39,18 +39,20 @@
     <div class="form-group">
       <label for="new-card-dmg">Sebzés</label>
       <div class="input-wrapper">
-        <input type="number" name="new-card-dmg" id="new-card-dmg" class="input-box" min="0" max="100" value="1" required />
+        <input type="number" name="new-card-dmg" id="new-card-dmg" class="input-box" min="0" max="100" value="1"
+          required />
       </div>
     </div>
 
     <div class="form-group">
       <label for="new-card-hp">Életerő</label>
       <div class="input-wrapper">
-        <input type="number" name="new-card-hp" id="new-card-hp" class="input-box" min="0" max="100" value="1" required />
+        <input type="number" name="new-card-hp" id="new-card-hp" class="input-box" min="0" max="100" value="1"
+          required />
       </div>
     </div>
 
-  <div class="form-group">
+    <div class="form-group">
       <label for="new-card-type">Típus</label>
       <div class="input-wrapper">
         <select name="new-card-type" id="new-card-type" class="input-box select-box">
@@ -67,28 +69,46 @@
   </div>
 
 
-    <div class="card-container"></div>
-  </div>
-  <div class="tab-content hidden" id="deck">
-    <div class="card-container"></div>
-  </div>
-  <div class="tab-content hidden" id="challenges">
-    <div>
-      <select name="diff-type" id="diff-type">
-        <option value="0">Egyszerű találkozás</option>
-        <option value="1">Kis kazamata</option>
-        <option value="2">Nagy kazamata</option>
-      </select>
-      <a class="button diff-button">Új kazamata</a>
-      <input type="text" name="boss-name-input" id="boss-name-input" />
-    </div>
-  </div>
-  {% if world %}
-  <div style="display: none" data-world-id="{{ world.id }}" data-world-name="{{ world.name }}"
-    data-level-data="{{ world.level_data }}" id="world"></div>
-  {% endif %} {% if image_urls %}
-  <div style="display: none" data-image-urls="{{ image_urls }}" id="url-data"></div>
-  {% endif %}
-  <button class="button done-button" id="done-button">Világ mentése</button>
+  <div class="card-container"></div>
+</div>
+<div class="tab-content hidden" id="deck">
+  <p>Kattintással válaszd ki, hogy a játékosok mely kártyákat használhatják a játék során!</p>
+  <div class="card-container"></div>
+</div>
+<div class="tab-content hidden" id="challenges">
 
-  {% endblock %}
+  <div class="horizontal-form">
+    <div class="form-group">
+      <label for="new-card-name">Kazamata neve</label>
+      <div class="input-wrapper">
+        <input type="text" name="boss-name-input" id="boss-name-input" class="input-box" placeholder="Veszedelem"
+          required />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="new-card-type">Típus</label>
+      <div class="input-wrapper">
+        <select name="diff-type" id="diff-type" class="input-box select-box">
+          <option value="0">Egyszerű találkozás</option>
+          <option value="1">Kis kazamata</option>
+          <option value="2">Nagy kazamata</option>
+        </select>
+        <div class="focus-effect"></div>
+      </div>
+    </div>
+
+    <button class="button diff-button" id="diff-button">Új kazamata mentése</button>
+  </div>
+  <p style="margin-bottom: 1.5rem; margin-top: -1rem;">A kis és nagy kazamatáknál, a vezér neve a kazamata neve.
+    A vezér mindig az a kártya, amelyiket utoljára választod ki.</p>
+
+</div>
+{% if world %}
+<div style="display: none" data-world-id="{{ world.id }}" data-world-name="{{ world.name }}"
+  data-level-data="{{ world.level_data }}" id="world"></div>
+{% endif %} {% if image_urls %}
+<div style="display: none" data-image-urls="{{ image_urls }}" id="url-data"></div>
+{% endif %}
+<button class="button done-button" id="done-button">Világ mentése</button>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "visszanyil.html" %} {% load static %} {% block title %}
+<h2>Válassz kártyákat!</h2>
+{% endblock %} {% block extra_head %}
+<link rel="stylesheet" href="{% static 'editor/editor.css' %}" />
+{% endblock %} {% block back_url %}{% url 'new_game' %}{% endblock %}
+{% block tobbi_content %}
+{% if messages %}
+<div class="messages">
+  {% for message in messages %}
+  <div>
+    <p class="messages">{{ message }}</p>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% for player, enemy, win in card_data %}
+<div class="game-container"></div>
+<div></div>
+<div></div>
+{% endfor %}
+
+{% if image_urls %}
+<div style="display: none" data-image-urls="{{ image_urls }}" id="url-data"></div>
+{% endif %}
+
+<script src="{% static 'game/result.js' %}"></script>
+{% endblock %}

@@ -36,7 +36,7 @@ doneButton.addEventListener("click", async () => {
   const cookie = getCookie("Cookie");
 
   if (!nameTextbox.value) {
-    alert("Please enter a world name.");
+    alert("A világ nevének megadása kötelező.");
     return;
   }
 
@@ -59,9 +59,9 @@ doneButton.addEventListener("click", async () => {
     if (response.ok) {
       window.location.href = "/editor/";
     } else {
-      alert("Error saving data.");
+      alert("Hiba az adatok mentésekor.");
     }
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Hiba:", error);
   }
 });

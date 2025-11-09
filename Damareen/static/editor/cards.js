@@ -48,8 +48,8 @@ newCardButton.addEventListener("click", () => {
   });
 
   newCardNameInput.value = "";
-  newCardHpInput.value = "";
-  newCardDmgInput.value = "";
+  newCardHpInput.value = 1;
+  newCardDmgInput.value = 1;
   newCardTypeSelect.value = "0";
 });
 

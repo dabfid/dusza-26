@@ -35,33 +35,38 @@
   background: #435663;
 }
 
+.tab-content hr {
+  border: none;
+  border-top: 2px solid #a3b087;
+  margin: 1rem 0;
+}
+
 .hidden {
   display: none;
 }
 
-.new-card-form-container {
+.horizontal-form {
   display: flex;
   flex-direction: row;
   gap: 0.8rem;
-  margin-bottom: 1rem;
 }
-.new-card-form-container label {
+.horizontal-form label {
   color: #fff8d4;
   font-size: 1rem;
   align-self: center;
 }
-.new-card-form-container input {
+.horizontal-form input {
   flex: 1;
   padding: 0.5rem;
   font-size: 1rem;
   border: 2px solid #a3b087;
 }
-.new-card-form-container button {
+.horizontal-form button {
   padding: 0.2rem 1rem;
   max-width: 250px;
   font-size: 1rem !important;
   max-height: 38px;
-  margin-top: 1.1rem;
+  margin-top: 18px;
   display: inline-block;
   width: inherit;
   border-width: 2px;
@@ -73,7 +78,13 @@
   column-gap: 0.8rem;
   grid-template-columns: repeat(2, max-content);
   justify-content: start;
+  margin-bottom: 0.5em;
 }
+/* game card selection */
+#choose-form .card-container {
+  justify-content: center;
+}
+
 .card,
 .buff-card {
   width: 7.7rem;
@@ -89,6 +100,9 @@
 .card-delete {
   cursor: pointer;
 }
+#deck .card-delete {
+  display: none;
+}
 
 .card-picture {
   width: 100%;
@@ -102,12 +116,26 @@
   flex: 1;
 }
 
-.card-small {
-  width: 5rem;
-  height: 6.6rem;
-  background-color: green;
+.card-background {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
+#challenges {
+  max-height: 50vh;
+  overflow: auto;
+  scrollbar-width: large;
+  scrollbar-color: #a3b087 #222034;
+}
+
+.card-small {
+  width: 5rem;
+  height: 8.4rem;
+  background-color: #313647;
+  border: 2px solid #a3b087;
+  padding: 5px 8px;
+}
 
 .kazameta-container {
   display: grid;
@@ -118,17 +146,30 @@
 
 .kazameta-wrap {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   margin: 1rem 0;
   gap: 2rem;
+  justify-content: space-between;
+}
+
+.kazameta-wrap .delete-button {
+  margin-top: 0;
+  font-size: 1rem !important;
+  width: 110px;
+  border-width: 2px;
+  padding: 0.5rem 1rem;
 }
 
 .active-card {
   filter: drop-shadow(0 0 0.4rem yellow) brightness(1.1) saturate(0.95);
 }
 
+.buff-selector .button {
+  margin-left: 15px;
+}
+
 .active-buff {
-  color: blueviolet;
+  color: #222034;
 }
 
 .no-deco {

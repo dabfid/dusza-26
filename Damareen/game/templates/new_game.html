@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}<h2>Világok</h2>{% endblock %}
-
+{% block back_url %}{% url 'main' %}{% endblock %}
 {% block tobbi_content %}
 <div class="saves-list">
   {% for world in worlds %}
@@ -15,8 +15,8 @@
     <div class="pixel-corner pixel-corner-br"></div>
 
     <div class="save-content">
-      <div class="game-id">Világ neve: {{ world.name }}</div>
-      <div class="game-creator">Létrehozó: {{ world.creator.username }}</div>
+      <div class="game-id">{{ world.name }}</div>
+      <div class="game-creator">Létrehozta: {{ world.creator.username }}</div>
     </div>
   </div>
 </a>

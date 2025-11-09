@@ -12,6 +12,10 @@ const worldCardContainer = document.querySelector(
   "#world_cards .card-container"
 );
 
+const imageUrls = JSON.parse(
+  document.querySelector("#url-data").dataset.imageUrls
+);
+
 let selectedCards = [];
 
 const getFromDiff = {
@@ -81,21 +85,31 @@ newChallengeButton.addEventListener("click", async () => {
     });
   });
 
-  challengesTab.prepend(cardSelector);
+  const kazamataContainer = document.createElement("div");
+  kazamataContainer.className = "kazamata-container";
+
+  const separator = document.createElement("hr");
+  kazamataContainer.append(separator);
 
   const selectedAmountText = document.createElement("p");
-  selectedAmountText.textContent = "0 / " + getFromDiff[selectedDifficulty];
-  challengesTab.prepend(selectedAmountText);
+  selectedAmountText.textContent = `${bossNameInput.value} – 0 / ${getFromDiff[selectedDifficulty]} kiválasztva`;
+  kazamataContainer.append(selectedAmountText);
+
+  kazamataContainer.append(cardSelector);
 
   let buffDefButton, buffAttButton;
   if (selectedDifficulty != 0) {
+    const buffSelector = document.createElement("div");
+    buffSelector.className = "buff-selector";
+    buffSelector.innerHTML = "<span>Válassz duplázást a vezérnek: </span>";
+
     buffDefButton = document.createElement("a");
     buffAttButton = document.createElement("a");
 
     buffDefButton.className = "button buff-def-button active-buff";
-    buffDefButton.textContent = "Def ^";
+    buffDefButton.textContent = "Életerő";
     buffAttButton.className = "button buff-att-button";
-    buffAttButton.textContent = "Att ^";
+    buffAttButton.textContent = "Sebzés";
 
     buffDefButton.addEventListener("click", () => {
       setActiveButton(buffDefButton, buffAttButton);
@@ -104,16 +118,18 @@ newChallengeButton.addEventListener("click", async () => {
       setActiveButton(buffAttButton, buffDefButton);
     });
 
-    challengesTab.prepend(buffDefButton);
-    challengesTab.prepend(buffAttButton);
+    buffSelector.appendChild(buffDefButton);
+    buffSelector.appendChild(buffAttButton);
+    kazamataContainer.append(buffSelector);
   }
+
+  challengesTab.append(kazamataContainer);
 
   await new Promise((resolve) => {
     availableCards.forEach((card) => {
       card.addEventListener("click", () => {
         const selectedAmount = Object.keys(selectedCards).length;
-        selectedAmountText.textContent =
-          selectedAmount + " / " + getFromDiff[selectedDifficulty];
+        selectedAmountText.textContent = `${bossNameInput.value} – ${selectedAmount} / ${getFromDiff[selectedDifficulty]} kiválasztva`;
 
         if (selectedAmount === getFromDiff[selectedDifficulty]) {
           resolve();
@@ -133,7 +149,7 @@ newChallengeButton.addEventListener("click", async () => {
   }
 
   createKazameta(selectedDifficulty, buff, selectedCards);
-  cardSelector.remove();
+  kazamataContainer.remove();
   selectedAmountText.remove();
   if (selectedDifficulty != 0) {
     buffDefButton.remove();
@@ -163,32 +179,16 @@ export function createKazameta(difficulty, buff, cards) {
     const newCard = cards.cloneNode(true);
     container.appendChild(newCard);
     newCard.className = "card-small";
-  } else if (Array.isArray(cards) && typeof cards[0] === "string") {
-    cards.forEach((id) => {
-      const newCard = document
-        .querySelector(`#world_cards .card[data-card-id="${id}"]`)
-        .cloneNode(true);
-      container.appendChild(newCard);
-      newCard.className = "card-small";
-      newCards.push(newCard);
-    });
-    if (difficulty !== "0") {
-      const boss = newCards[newCards.length - 1];
-      applyBuff(boss, buff);
-    }
   } else {
     Array.from(Object.values(cards)).forEach((card) => {
       let newCard;
       if (card instanceof HTMLElement) {
         newCard = card.cloneNode(true);
+        container.appendChild(newCard);
+        newCard.className = "card-small";
       } else {
-        newCard = worldCardContainer
-          .querySelector(`.card[data-card-name='${card.cardName}']`)
-          .cloneNode(true);
-        newCard.querySelectorAll("a").forEach((btn) => btn.remove());
+        newCard = createCardElement(card, container);
       }
-      container.appendChild(newCard);
-      newCard.className = "card-small";
       newCards.push(newCard);
     });
     if (difficulty !== "0") {
@@ -197,9 +197,9 @@ export function createKazameta(difficulty, buff, cards) {
     }
   }
 
-  const deleteButton = document.createElement("a");
+  const deleteButton = document.createElement("button");
   deleteButton.className = "button delete-button";
-  deleteButton.textContent = "Törlés";
+  deleteButton.textContent = "Kazamata törlése";
   deleteButton.addEventListener("click", () => {
     wrap.remove();
   });
@@ -212,14 +212,62 @@ export function createKazameta(difficulty, buff, cards) {
   return wrap;
 }
 
+function createCardElement(cardData, cardsContainer) {
+  const newCard = document.createElement("div");
+  newCard.dataset.cardName = cardData.cardName;
+  newCard.dataset.cardHp = cardData.cardHp;
+  newCard.dataset.cardDmg = cardData.cardDmg;
+  newCard.dataset.cardType = cardData.cardType;
+  newCard.dataset.cardBackgroundImageIndex = cardData.cardBackgroundImageIndex;
+  newCard.className = "card-small";
+
+  const topRow = document.createElement("div");
+  topRow.className = "card-top-row";
+
+  const nameElement = document.createElement("span");
+  nameElement.className = "card-name";
+  nameElement.textContent = cardData.cardName;
+  topRow.appendChild(nameElement);
+
+  newCard.appendChild(topRow);
+
+  const background = document.createElement("img");
+  background.src =
+    imageUrls[cardData.cardType][cardData.cardBackgroundImageIndex];
+  background.className = "card-picture";
+  newCard.appendChild(background);
+
+  const info = document.createElement("div");
+  info.className = "card-info";
+
+  const hpElement = document.createElement("span");
+  hpElement.className = "card-hp";
+  hpElement.textContent = `${cardData.cardHp}`;
+  info.appendChild(hpElement);
+
+  const dmgElement = document.createElement("span");
+  dmgElement.className = "card-dmg";
+  dmgElement.textContent = `${cardData.cardDmg}`;
+  info.appendChild(dmgElement);
+
+  newCard.appendChild(info);
+
+  cardsContainer.appendChild(newCard);
+
+  return newCard;
+}
+
 export function gatherChallengeData() {
   let challenges = [];
   const challengeWraps = document.querySelectorAll(".kazameta-wrap");
   challengeWraps.forEach((wrap) => {
     let cards = [];
     Array.from(
-      wrap.querySelector(".kazameta-container").querySelectorAll("div")
+      wrap
+        .querySelector(".kazameta-container")
+        .querySelectorAll("div.card, div.card-small")
     ).forEach((card) => {
+      console.log(card.dataset);
       cards.push({ ...card.dataset });
     });
     challenges.push({

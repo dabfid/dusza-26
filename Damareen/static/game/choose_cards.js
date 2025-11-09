@@ -44,14 +44,43 @@ function createCardElement(cardData) {
   newCard.dataset.cardBackgroundImageIndex = cardData.cardBackgroundImageIndex;
   newCard.className = "card";
 
-  const background = document.createElement("img");
-  background.className = "card-background";
+  const topRow = document.createElement("div");
+  topRow.className = "card-top-row";
 
+  const nameElement = document.createElement("span");
+  nameElement.className = "card-name";
+  nameElement.textContent = cardData.cardName;
+  topRow.appendChild(nameElement);
+
+  newCard.appendChild(topRow);
+
+  const background = document.createElement("img");
   background.src =
     imageUrls[cardData.cardType][cardData.cardBackgroundImageIndex];
+  background.className = "card-picture";
   newCard.appendChild(background);
 
+  const info = document.createElement("div");
+  info.className = "card-info";
+
+  const hpElement = document.createElement("span");
+  hpElement.className = "card-hp";
+  hpElement.textContent = `${cardData.cardHp}`;
+  info.appendChild(hpElement);
+
+  const dmgElement = document.createElement("span");
+  dmgElement.className = "card-dmg";
+  dmgElement.textContent = `${cardData.cardDmg}`;
+  info.appendChild(dmgElement);
+
+  newCard.appendChild(info);
+
   newCard.addEventListener("click", () => {
+    if (selectedCards.length === getFromDiff[difficultyData]) {
+      if (!newCard.classList.contains("active-card")) {
+        return;
+      }
+    }
     const cardName = newCard.dataset.cardName;
     if (newCard.classList.contains("active-card")) {
       newCard.classList.remove("active-card");

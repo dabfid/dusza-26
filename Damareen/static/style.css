@@ -4,7 +4,12 @@
   box-sizing: border-box;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-align: center;
   color: #fff8d4;
   text-shadow: 3px 3px 0 #7a7764;
@@ -18,6 +23,115 @@ h2 {
 h3 {
   font-size: 26px;
   margin-bottom: 15px;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+
+#koponya {
+  width: 150px;
+  height: 150px;
+  display: block;
+  margin: 20px auto;
+}
+
+
+.development-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+/* Első sor: kisebb divek */
+.dev-slots {
+  display: flex;
+  gap: 15px;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.dev-slot {
+  width: 60px;
+  height: 60px;
+  background-color: #222034;
+  border: 3px solid #a3b087;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #fff8d4;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dev-slot:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+}
+
+/* Pixel sarok */
+.dev-slot .pixel-corner {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: #a3b087;
+}
+
+.dev-slot .pixel-corner-tl { top: 0; left: 0; }
+.dev-slot .pixel-corner-tr { top: 0; right: 0; }
+.dev-slot .pixel-corner-bl { bottom: 0; left: 0; }
+.dev-slot .pixel-corner-br { bottom: 0; right: 0; }
+
+/* Második sor: pontok és gombok */
+.dev-controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.dev-points {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff8d4;
+}
+
+.dev-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.dev-btn {
+  padding: 10px 20px;
+  background-color: #435663;
+  border: 3px solid #a3b087;
+  color: #fff8d4;
+  font-family: "Born2bSporty FS";
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dev-btn:hover {
+  background-color: #313647;
+  border-color: #d1cbaf;
+  color: #d1cbaf;
+}
+
+.dev-btn:active {
+  transform: scale(0.98);
+}
+
+/* Mobil nézet */
+@media (max-width: 700px) {
+  .dev-controls {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
 }
 
 body {
@@ -105,7 +219,6 @@ body {
   margin-bottom: 20px;
 }
 
-
 .minikep {
   height: 35px;
   width: 35px;
@@ -115,7 +228,7 @@ body {
 .arrow-container {
   position: absolute;
   top: 20px;
-  left: 20px; 
+  left: 20px;
   z-index: 10;
 }
 
@@ -128,7 +241,7 @@ body {
 @media (max-width: 700px) {
   .arrow-container {
     top: 15px;
-    left: 15px; 
+    left: 15px;
   }
 
   .back-arrow-inner {
@@ -138,7 +251,7 @@ body {
 }
 
 .saves-list {
-  max-height: 12rem;
+  max-height: 50vh;
   overflow: auto;
   scrollbar-width: large;
   scrollbar-color: #a3b087 #222034;
@@ -148,14 +261,12 @@ body {
   text-decoration: none;
 }
 
-
-
 .save-box {
   display: block;
   position: relative;
   padding: 14px 16px;
   margin: 12px 0;
-  background-color: #222034; 
+  background-color: #222034;
   color: #f4f4f4;
   text-decoration: none;
   border: 3px solid #435663;
@@ -175,8 +286,11 @@ body {
 .save-box .pixel-corner {
   width: 10px;
   height: 10px;
-  background-color: #a3b087;
+  background-color: #435663;
   pointer-events: none;
+}
+.save-box:hover .pixel-corner{
+  background-color: #a3b087;
 }
 
 .save-box .pixel-corner-tl {
@@ -196,7 +310,7 @@ body {
   right: 0;
 }
 
-.save-box a{
+.save-box a {
   text-decoration: none;
   color: inherit;
 }
@@ -212,7 +326,7 @@ body {
 .save-content {
   display: flex;
   align-items: center;
-  justify-content: space-between; 
+  justify-content: space-between;
   gap: 12px;
 }
 
@@ -233,7 +347,6 @@ body {
   align-items: center;
   justify-content: center;
 }
-
 
 @media (max-width: 700px) {
   .delete-icon {
@@ -269,7 +382,7 @@ body {
 .form-group label {
   display: block;
   font-size: 20px;
- 
+
   color: #fff8d4;
 }
 
@@ -330,7 +443,7 @@ button:active {
   transform: scale(0.98);
 }
 
-button .minikep{
+button .minikep {
   height: 35px;
   width: 35px;
   margin-top: -20px;
@@ -421,7 +534,7 @@ button .minikep{
 select.input-box,
 .select-box {
   width: 100%;
-  background:  #222034;
+  background: #222034;
   color: #fff;
   border: 2px solid #a3b087;
   padding: 7px 12px;
@@ -436,7 +549,7 @@ select.input-box,
 }
 
 .select-box:disabled {
-  opacity: .5;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -456,7 +569,6 @@ select.input-box,
   transition: opacity 0.3s;
 }
 
-
 @media (max-width: 700px) {
   .container {
     width: 90%;
@@ -468,7 +580,7 @@ select.input-box,
     margin-bottom: 0;
   }
 
-  .title-text{
+  .title-text {
     margin: 0;
   }
 
@@ -492,7 +604,7 @@ select.input-box,
     margin-top: 18px;
   }
 
-  h2{
+  h2 {
     font-size: 30px;
   }
 }

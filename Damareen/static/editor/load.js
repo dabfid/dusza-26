@@ -30,11 +30,14 @@ function loadChallengeData(challengeData) {
 
 if (world) {
   const worldName = world.dataset.worldName;
+  nameTextbox.value = worldName;
+
   const levelData = world.dataset.levelData.replace(/'/g, '"');
 
-  nameTextbox.value = worldName;
-  const parsedLevelData = JSON.parse(levelData);
+  if (levelData) {
+    const parsedLevelData = JSON.parse(levelData);
 
-  loadCardData(parsedLevelData.cardData);
-  loadChallengeData(parsedLevelData.challengeData);
+    loadCardData(parsedLevelData.cardData);
+    loadChallengeData(parsedLevelData.challengeData);
+  }
 }

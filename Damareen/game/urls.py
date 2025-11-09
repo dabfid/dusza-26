@@ -7,6 +7,7 @@ urlpatterns = [
     path('new/', views.new_game, name='new_game'),
     path('choose/<int:world_id>/<int:difficulty>/', views.choose, name='choose'),
     # play most már világot és karaktert is fogad
-    path('play/<int:world_id>/<str:character>/', views.play, name='play'),
+    path('result/<int:world_id>/', views.result, name='result'),
     path('difficulty/<int:world_id>', views.dif, name='dif'),
+    path('upgrade/<int:world_id>/', views.upgrade, name='upgrade'),
 ]

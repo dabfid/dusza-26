@@ -1,11 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <p>{{ world_id }}</p>
-  </body>
-</html>
+{% extends "visszanyil.html" %} {% load static %} {% block title %}
+<h2>Harc eredményei</h2>
+{% endblock %} {% block tobbi_content %}
+
+<link rel="stylesheet" href="{% static 'game/battle.css' %}" />
+
+{% if messages %}
+<div class="messages">
+  {% for message in messages %}
+  <div><p class="messages">{{ message }}</p></div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div>
+  <div class="battle-log d-flex" id="battle-log">
+    <div class="card-container" id="card-container">a</div>
+    <div class="card-container" id="card-container">b</div>
+  </div>
+</div>
+
+{% for card in cards %}
+<div
+  class="game-container save-box card-item card-data"
+  style="display: none"
+  data-name="{{ card.cardName }}"
+  data-type="{{ card.cardType }}"
+  data-dmg="{{ card.cardDmg }}"
+  data-hp="{{ card.cardHp }}"
+  data-img="{{ card.cardBackgroundImageIndex }}"
+></div>
+{% endfor %}
+
+<script src="{% static 'game/battle.js' %}"></script>
+{% endblock %}
