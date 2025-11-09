@@ -11,6 +11,7 @@ urlpatterns = [
     path('difficulty/<int:world_id>', views.dif, name='dif'),
     path('upgrade/<int:world_id>/<int:difficulty>', views.upgrade, name='upgrade'),
     path('api/get/', api.get, name='api_get'),
+    path('api/get2/', api.gettwo, name='api_gettwo'),
     path('api/delete/<int:id>/', api.delete, name='api_delete'),
     path('api/update_or_create/', api.update_or_create, name='api_update_or_create'),
 ]

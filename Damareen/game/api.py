@@ -12,7 +12,7 @@ def get(request):
     try:
         world_id = request.GET.get('id') 
         
-        save = Saves.objects.get(world__id=world_id, profile__id=request.user.id)
+        save = Saves.objects.filter(world=world_id, profile=request.user.id).first()
         return JsonResponse({
             'id': save.id,
             'world': save.world.id,
@@ -24,11 +24,11 @@ def get(request):
 
 @require_http_methods(["GET"])
 @login_required(login_url='login')
-def get(request):
+def gettwo(request):
     try:
         save_id = request.GET.get('id') 
         
-        save = Saves.objects.get(id=save_id, profile__id=request.user.id)
+        save = Saves.objects.filter(id=save_id, profile=request.user.id).first()
         return JsonResponse({
             'id': save.id,
             'world': save.world.id,

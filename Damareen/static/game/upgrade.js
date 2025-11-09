@@ -110,10 +110,9 @@ async function createCardElement(cardData) {
           Cookie: cookie,
         },
       });
-
       if (res.ok) {
         const response = await fetch(
-          "/api/update_or_create/?id=" + res.body.id,
+          "/game/api/update_or_create/?id=" + (await res.json()).id,
           {
             method: "POST",
             headers: {
@@ -121,8 +120,7 @@ async function createCardElement(cardData) {
               Cookie: cookie,
             },
             body: JSON.stringify({
-              name: nameTextbox.value,
-              level_data: data,
+              save_data: cardState,
             }),
           }
         );

@@ -120,32 +120,29 @@ def play(request, world_id, difficulty):
         
         image_urls = [[static(path) for path in pair] for pair in images]
         
+        characters = None
         if save_data:
-            save_data = save_data.replace("'", '"')
-            print(save_data['cards'])
-            save_deck_data = json.loads(save_data)
-            print(save_deck_data)
+            save_deck_data = json.loads(json.loads(save_data))
             
-            """
             characters = [
                 {
                     'name': card['cardName'],
-                    'hp': int(card['cardHp']),
-                    'damage': int(card['cardDmg']),
-                    'type': int(card['cardType']),
-                    'imgIndex': int(card.get('cardBackgroundImageIndex', 0))
+                    'hp': card['cardHp'],
+                    'damage': card['cardDmg'],
+                    'type': card['cardType'],
+                    'imgIndex': card.get('cardBackgroundImageIndex', 0)
                 } 
-                for card in save_deck_data['cards']
+                for card in save_deck_data.get('cards', [])
             ]
-            """
-        # Módosított rész: deckCards.worldCards használata
-        characters = [{
-            'name': card['cardName'],
-            'hp': card['cardHp'],
-            'damage': card['cardDmg'],  # Figyelem: cardDmg, nem cardDamage!
-            'type': card['cardType'],
-            'imgIndex': card.get('cardBackgroundImageIndex', 0)
-        } for card in data.get('cardData', {}).get('deckCards', [])]
+        else:
+            # Módosított rész: deckCards.worldCards használata
+            characters = [{
+                'name': card['cardName'],
+                'hp': card['cardHp'],
+                'damage': card['cardDmg'],  # Figyelem: cardDmg, nem cardDamage!
+                'type': card['cardType'],
+                'imgIndex': card.get('cardBackgroundImageIndex', 0)
+            } for card in data.get('cardData', {}).get('deckCards', [])]
         
         
         challengeData = data.get('challengeData', [])
