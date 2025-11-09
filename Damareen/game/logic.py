@@ -14,9 +14,8 @@ def isEnemyWinning(player, enemy):
       3: 2   # levegő legyőzi tüzet
     }
     
-    player_kills_enemy = player['cardDmg'] >= enemy['cardHp']
-    enemy_kills_player = enemy['cardDmg'] >= player['cardHp']
-    
+    player_kills_enemy = int(player['cardDmg']) >= int(enemy['cardHp'])
+    enemy_kills_player = int(enemy['cardDmg']) >= int(player['cardHp'])
     # Ha csak a játékos öl
     if player_kills_enemy and not enemy_kills_player:
         return False  # Játékos nyer

@@ -1,3 +1,5 @@
+import { showAlert } from './alert.js';
+
 const newCard = document.createElement("div");
 
 const newChallengeButton = document.querySelector(".diff-button");
@@ -17,6 +19,7 @@ const imageUrls = JSON.parse(
 );
 
 let selectedCards = [];
+let bossName = "";
 
 const getFromDiff = {
   0: 1,
@@ -28,7 +31,7 @@ function applyBuff(boss, buff) {
   boss.classList.add("buff-card");
   boss.classList.add("card");
   boss.classList.remove("card-small");
-  boss.dataset.cardName = bossNameInput.value;
+  boss.dataset.cardName = bossName;
   if (buff === 1) {
     boss.dataset.cardHp = parseInt(boss.dataset.cardHp) * 2;
   } else if (buff === 2) {
@@ -51,18 +54,20 @@ newChallengeButton.addEventListener("click", async () => {
   const availableCards = cardSelector.querySelectorAll(".card");
 
   if (availableCards.length < getFromDiff[selectedDifficulty]) {
-    alert("Nincs elég kártya a világban a kiválasztott nehézségi szinthez!");
+    showAlert("Nincs elég kártya a világban a kiválasztott nehézségi szinthez!");
     newChallengeButton.addEventListener("click", this);
     return;
   }
 
   if (selectedDifficulty != 0) {
     if (bossNameInput.value.trim() === "") {
-      alert("Kérlek add meg a vezér nevét!");
+      showAlert("Kérlek add meg a vezér nevét!");
       newChallengeButton.addEventListener("click", this);
       return;
     }
   }
+
+  bossName = bossNameInput.value;
 
   availableCards.forEach((card) =>
     card.querySelectorAll("a").forEach((btn) => btn.remove())
@@ -276,5 +281,16 @@ export function gatherChallengeData() {
       cards: cards,
     });
   });
+
+  const difficulties = challenges.map(c => c.difficulty);
+  const hasDiff0 = difficulties.filter(d => d === '0').length >= 1;
+  const hasDiff1 = difficulties.filter(d => d === '1').length >= 1;
+  const hasDiff2 = difficulties.filter(d => d === '2').length >= 1;
+  
+  if (!hasDiff0 || !hasDiff1 || !hasDiff2) {
+    showAlert('Legalább egy könnyű, egy közepes és egy nehéz kazamatát szükséges létrehozni!');
+    throw new Error('Legalább egy könnyű, egy közepes és egy nehéz kazamatát szükséges létrehozni!');
+  }
+
   return challenges;
 }

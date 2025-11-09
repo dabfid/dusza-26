@@ -94,12 +94,6 @@ p {
   align-items: center;
 }
 
-.dev-points {
-  font-size: 22px;
-  font-weight: bold;
-  color: #fff8d4;
-}
-
 .dev-buttons {
   display: flex;
   gap: 10px;
@@ -372,6 +366,7 @@ body {
 
 .title-text {
   margin: 0 10px;
+  cursor: pointer;
 }
 
 .form-group {

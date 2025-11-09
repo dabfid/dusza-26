@@ -4,11 +4,18 @@
 
 {% block tobbi_content %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'game/saves.css' %}" />
+{% endblock %}
+
+{% block extra_body %}
+<script type="module" src="{% static 'game/saves.js' %}"></script>
+{% endblock %}
 
 <div class="saves-list">
   {% for save in saves %}
   <a href="#">
-    <div class="game-container save-box">
+    <div class="game-container save-box save-click" data-save-id="{{ save.id }}">
       <div class="save-content">
         <div class="save-info">
           <div class="game-id">ID: {{ save.id }}</div>
@@ -21,7 +28,7 @@
     </div>
   </a>
   {% empty %}
-  <h3>Itt folytathatod majd a megkezdett játékaidat.</h3>
+  <p style="text-align: center;">Itt folytathatod majd a megkezdett játékaidat.</p>
   {% endfor %}
 </div>
 

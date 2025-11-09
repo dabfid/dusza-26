@@ -8,21 +8,21 @@
   {% for world in worlds %}
 
   <a href="{% url 'dif' world.id %}">
-  <div class="game-container save-box">
-    <div class="pixel-corner pixel-corner-tl"></div>
-    <div class="pixel-corner pixel-corner-tr"></div>
-    <div class="pixel-corner pixel-corner-bl"></div>
-    <div class="pixel-corner pixel-corner-br"></div>
+    <div class="game-container save-box">
+      <div class="pixel-corner pixel-corner-tl"></div>
+      <div class="pixel-corner pixel-corner-tr"></div>
+      <div class="pixel-corner pixel-corner-bl"></div>
+      <div class="pixel-corner pixel-corner-br"></div>
 
-    <div class="save-content">
-      <div class="game-id">{{ world.name }}</div>
-      <div class="game-creator">Létrehozta: {{ world.creator.username }}</div>
+      <div class="save-content">
+        <div class="game-id">{{ world.name }}</div>
+        <div class="game-creator">Létrehozta: {{ world.creator.username }}</div>
+      </div>
     </div>
-  </div>
-</a>
+  </a>
 
-{% empty %}
-<h3>A játékmester még nem hozott létre egy világot sem.</h3>
-{% endfor %}
+  {% empty %}
+  <p style="text-align: center;">A játékmester még nem hozott létre egy világot sem.</p>
+  {% endfor %}
 </div>
 {% endblock %}

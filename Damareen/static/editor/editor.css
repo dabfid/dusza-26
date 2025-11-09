@@ -80,9 +80,32 @@
   justify-content: start;
   margin-bottom: 0.5em;
 }
+
+/* result animation */
+#resultAnimation {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 /* game card selection */
-#choose-form .card-container {
+#choose-form .card-container,
+.result-container {
+  display: flex;
   justify-content: center;
+}
+.result-container {
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 25px;
+}
+.result-container .result-view {
+  text-align: center;
+  font-size: 18px;
+}
+.result-container .card {
+  margin-bottom: 15px;
+  margin-right: 5px;
 }
 
 .card,
@@ -148,8 +171,10 @@
   display: flex;
   align-items: flex-start;
   margin: 1rem 0;
+  padding-bottom: 1rem;
   gap: 2rem;
   justify-content: space-between;
+  border-bottom: 2px solid #a3b087;
 }
 
 .kazameta-wrap .delete-button {

@@ -2,16 +2,19 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Characters
+from .models import Profile
 from django.templatetags.static import static
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 
 def homepage(request):
     logged = False
+    jatekmester = False
     if request.user.is_authenticated:
         logged = True
-    return render(request, 'homepage.html', {'logged': logged})
+        if hasattr(request.user, 'profile') and request.user.profile.isJatekmester:
+            jatekmester = True
+    return render(request, 'homepage.html', {'logged': logged, 'jatekmester': jatekmester})
 
 def login(request):
     if request.user.is_authenticated:
@@ -69,6 +72,7 @@ def register(request):
                 return render(request, 'register.html')
 
             user = User.objects.create_user(username=username, password=password)
+            user = Profile.objects.create(user=user, isJatekmeste=False)
             user = authenticate(request, username=username, password=password)
             
             if user is not None:

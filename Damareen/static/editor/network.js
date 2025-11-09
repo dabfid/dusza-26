@@ -1,3 +1,4 @@
+import { showAlert } from "./alert.js";
 import { gatherCardData } from "./cards.js";
 import { gatherChallengeData } from "./challenges.js";
 
@@ -14,6 +15,7 @@ function gatherData() {
     cardData,
     challengeData,
   };
+
 }
 
 function getCookie(name) {
@@ -32,15 +34,15 @@ function getCookie(name) {
 }
 
 doneButton.addEventListener("click", async () => {
-  const data = gatherData();
-  const cookie = getCookie("Cookie");
-
-  if (!nameTextbox.value) {
-    alert("A világ nevének megadása kötelező.");
-    return;
-  }
-
   try {
+    const data = gatherData();
+    const cookie = getCookie("Cookie");
+
+    if (!nameTextbox.value) {
+      showAlert("A világ nevének megadása kötelező.");
+      return;
+    }
+
     const response = await fetch(
       "/editor/worlds/update/" + world.dataset.worldId,
       {
@@ -59,7 +61,7 @@ doneButton.addEventListener("click", async () => {
     if (response.ok) {
       window.location.href = "/editor/";
     } else {
-      alert("Hiba az adatok mentésekor.");
+      showAlert("Hiba az adatok mentésekor.");
     }
   } catch (error) {
     console.error("Hiba:", error);

@@ -19,9 +19,11 @@
   <button onclick="window.location.href='game/'" type="submit" id="submitBtn">
     HARCRA FEL!
   </button>
-  <button onclick="window.location.href='editor/'" type="submit" id="submitBtn">
-    JÁTÉKMESTER MÓD
-  </button>
+    {% if jatekmester %}
+    <button onclick="window.location.href='editor/'" type="submit" id="submitBtn">
+      JÁTÉKMESTER
+    </button>
+    {% endif %}
   <button onclick="window.location.href='logout/'" type="submit" id="submitBtn">
     KIJELENTKEZÉS
   </button>

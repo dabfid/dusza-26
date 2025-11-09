@@ -2,6 +2,7 @@
 {% load static %}
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'editor/editor.css' %}" />
+<link rel="stylesheet" href="{% static 'editor/alert.css' %}" />
 {% endblock %}
 {% block extra_body %}
 <script type="module" src="{% static 'editor/cards.js' %}"></script>
@@ -100,7 +101,7 @@
     <button class="button diff-button" id="diff-button">Új kazamata mentése</button>
   </div>
   <p style="margin-bottom: 1.5rem; margin-top: -1rem;">A kis és nagy kazamatáknál, a vezér neve a kazamata neve.
-    A vezér mindig az a kártya, amelyiket utoljára választod ki.</p>
+    A vezér mindig az a kártya, amelyit utoljára választasz ki.</p>
 
 </div>
 {% if world %}

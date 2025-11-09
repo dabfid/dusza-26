@@ -1,3 +1,5 @@
+import { showAlert } from "./alert.js";
+
 const deckTabContainer = document.querySelector("#deck .card-container");
 
 const worldCardsContainer = document.querySelector(
@@ -19,17 +21,17 @@ let cardNames = [];
 newCardButton.addEventListener("click", () => {
   const newCardName = newCardNameInput.value.trim();
   if (!newCardName) {
-    alert("Kérlek adj meg egy kártyanevet.");
+    showAlert("Kérlek adj meg egy kártyanevet.");
     return;
   }
 
   if (!newCardHpInput.value || !newCardDmgInput.value) {
-    alert("Kérlek adj meg életerőt és sebzést a kártyához szám formályában.");
+    showAlert("Kérlek adj meg életerőt és sebzést a kártyához szám formályában.");
     return;
   }
 
   if (cardNames.includes(newCardName)) {
-    alert("Már létezik ilyen nevű kártya.");
+    showAlert("Már létezik ilyen nevű kártya.");
     return;
   }
 
@@ -97,7 +99,7 @@ export function createCardElement(cardData) {
 
   const info = document.createElement("div");
   info.className = "card-info";
-  
+
   const hpElement = document.createElement("span");
   hpElement.className = "card-hp";
   hpElement.textContent = `${cardData.cardHp}`;
@@ -145,6 +147,11 @@ export function gatherCardData() {
       DeckCards.push({ ...card.dataset });
     }
   });
+
+  if (DeckCards.length < 6) {
+    showAlert("A paklidnak legalább 6 kártyából kell állnia.");
+    throw new Error("A pakli nem éri el a minimum kártyaszámot.");
+  }
 
   return {
     worldCards: worldCards,

@@ -14,14 +14,13 @@
     </div>
   </div>
   {% empty %}
-  <h3>Nincs létrehozva világ.</h3>
+  <p style="text-align: center;">Nincs létrehozva világ.</p>
   {% endfor %}
 </div>
 
 
 <button class="btn newgame-btn" onclick="window.location.href='new/'">
   ÚJ VILÁG LÉTREHOZÁSA
-  <img class="minikep" src="{% static 'kepek/ceruza.png' %}" alt="" />
 </button>
 
 <script>

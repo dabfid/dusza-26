@@ -4,20 +4,20 @@ from django.contrib.auth.decorators import login_required
 from home.models import Worlds
 from home.utils import get_static_images
 from django.templatetags.static import static
+from Damareen.decorators import jatekmester_only
 
 @login_required(login_url='login')
+@jatekmester_only
 def index(request):
   worlds = Worlds.objects.filter(creator__id = request.user.id)
   return render(request, "editor_main.html", {"worlds": worlds})
 
 @login_required(login_url='login')
+@jatekmester_only
 def editor(request, id):
   try:
     world = Worlds.objects.get(id=id)
   except Worlds.DoesNotExist:
-    return redirect('index')
-
-  if (world.creator.id != request.user.id):
     return redirect('index')
 
   images = [

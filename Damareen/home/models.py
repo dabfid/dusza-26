@@ -38,6 +38,7 @@ class Saves(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     name = models.CharField(max_length=64, blank=True)
+    isJatekmester = models.BooleanField()
 
 
 class Worlds(models.Model):

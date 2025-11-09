@@ -7,24 +7,33 @@
 
 {% block tobbi_content %}
 
-  <div class="difficulty-container">
-    <form method="POST" action="{% url 'dif' world_id %}">
-      {% csrf_token %}
-      <input type="hidden" name="difficulty" value="0">
-      <button type="submit" class="difficulty-card difficulty-card-1">Egyszerű találkozás</button>
-    </form>
+<div class="difficulty-container">
+  <form method="POST" action="{% url 'dif' world_id %}">
+    {% csrf_token %}
+    <input type="hidden" name="difficulty" value="0">
+    {% if save_id %}
+    <input type="hidden" name="save_id" value="{{ save_id }}">
+    {% endif %}
+    <button type="submit" class="difficulty-card difficulty-card-1">Egyszerű találkozás</button>
+  </form>
 
-    <form method="POST" action="{% url 'dif' world_id %}">
-      {% csrf_token %}
-      <input type="hidden" name="difficulty" value="1">
-      <button type="submit" class="difficulty-card difficulty-card-2">Kis kazamata</button>
-    </form>
+  <form method="POST" action="{% url 'dif' world_id %}">
+    {% csrf_token %}
+    <input type="hidden" name="difficulty" value="1">
+    {% if save_id %}
+    <input type="hidden" name="save_id" value="{{ save_id }}">
+    {% endif %}
+    <button type="submit" class="difficulty-card difficulty-card-2">Kis kazamata</button>
+  </form>
 
-    <form method="POST" action="{% url 'dif' world_id %}">
-      {% csrf_token %}
-      <input type="hidden" name="difficulty" value="2">
-      <button type="submit" class="difficulty-card difficulty-card-3">Nagy kazamata</button>
-    </form>
-  </div>
+  <form method="POST" action="{% url 'dif' world_id %}">
+    {% csrf_token %}
+    <input type="hidden" name="difficulty" value="2">
+    {% if save_id %}
+    <input type="hidden" name="save_id" value="{{ save_id }}">
+    {% endif %}
+    <button type="submit" class="difficulty-card difficulty-card-3">Nagy kazamata</button>
+  </form>
+</div>
 
 {% endblock %}
