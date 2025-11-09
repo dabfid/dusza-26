@@ -1,6 +1,8 @@
-{% extends "visszanyil.html" %} {% load static %}
+{% extends "visszanyil.html" %}
+{% load static %}
+{% block title %}<h2>Regisztráció</h2>{% endblock %}
 
-  {% block title %}REGISZTRÁCIÓ{% endblock %} {% block tobbi_content %} 
+{% block tobbi_content %} 
   {% if messages %}
   <div class="messages">
     {% for message in messages %}

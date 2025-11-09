@@ -57,8 +57,7 @@ doneButton.addEventListener("click", async () => {
     );
 
     if (response.ok) {
-      alert("Data saved successfully!");
-      //window.location.href = "/editor/";
+      window.location.href = "/editor/";
     } else {
       alert("Error saving data.");
     }

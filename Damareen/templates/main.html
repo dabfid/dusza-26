@@ -13,8 +13,10 @@
     <meta name="apple-mobile-web-app-title" content="Damareen" />
     <link rel="manifest" href="{% static 'site.webmanifest' %}" />
     <title>DAMAREEN</title>
+    {% block extra_head %}{% endblock %}
   </head>
   <body>
     {% block content %}{% endblock %}
+    {% block extra_body %}{% endblock %}
   </body>
 </html>

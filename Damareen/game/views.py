@@ -2,8 +2,11 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from home.models import Saves, Worlds
 from django.shortcuts import redirect
+from django.templatetags.static import static
 from django.contrib import messages
+from home.utils import get_static_images
 import json
+import random
 
 @login_required(login_url='login')
 def main(request):
@@ -25,6 +28,9 @@ def delete(request, save_id):
 @login_required(login_url='login')
 def new_game(request):
     world_list = Worlds.objects.all()
+    if world_list.count() == 0:
+        messages.info(request, 'Nincsenek elérhető világok új játék indításához. Kérlek, hozz létre egy világot először.')
+        return redirect('main')
     return render(request, 'new_game.html', {'worlds': world_list})
 
 
@@ -76,10 +82,11 @@ def play(request, world_id, character):
 
 
 @login_required(login_url='login')
-def choose(request, world_id):
+def choose(request, world_id, difficulty):
     if request.method == 'POST':
         # POST kezelés változatlan marad
-        raw_data = request.POST.get('characters', '[]')
+        print(request.POST)
+        raw_data = request.POST.get('cards', '[]')
         try:
             characters = json.loads(raw_data)
         except json.JSONDecodeError:
@@ -91,25 +98,56 @@ def choose(request, world_id):
                 'world_id': world_id,
                 'selected_characters': characters,
                 'first_character': selected
-            })
+        })
         else:
-            messages.error(request, 'Nem választottál karaktert.')
-            return redirect('choose', world_id=world_id)
+            return redirect('choose', world_id=world_id, difficulty=difficulty)
 
     else:
         # GET kérés: world_cards kiolvasása
         world_data = Worlds.objects.get(id=world_id).level_data
+        # fix malformed json
+        world_data = world_data.replace("'", '"')
         data = json.loads(world_data)
+        
+        images = [
+            get_static_images('kepek/kartyak/dirt'),
+            get_static_images('kepek/kartyak/water'),
+            get_static_images('kepek/kartyak/fire'),
+            get_static_images('kepek/kartyak/air'),
+        ]
+        
+        image_urls = [[static(path) for path in pair] for pair in images]
         
         # Módosított rész: cardData.worldCards használata
         characters = [{
             'name': card['cardName'],
             'hp': card['cardHp'],
             'damage': card['cardDmg'],  # Figyelem: cardDmg, nem cardDamage!
-            'type': card['cardType']
+            'type': card['cardType'],
+            'imgIndex': card.get('cardBackgroundImageIndex', 0)
         } for card in data.get('cardData', {}).get('worldCards', [])]
+        
+        
+        challengeData = data.get('challengeData', [])
+        challenges = [];
+        for challenge in challengeData:
+            if challenge['difficulty'] == difficulty:
+                challenges.append(challenge)
+
+        selected_challenge = random.choice(challenges) if challenges else None
 
         return render(request, 'choose.html', {
             'world_id': world_id,
-            'characters': characters
+            'characters': characters,
+            "image_urls": json.dumps(image_urls),
+            'difficulty': difficulty,
+            'selected_challenge': selected_challenge
         })
+
+
+
+def dif(request, world_id):
+    if request.method == 'POST':
+        difficulty = request.POST.get('difficulty')
+        return redirect('choose', world_id=world_id, difficulty=difficulty)
+    return render(request, 'difficulty.html', {'world_id': world_id})

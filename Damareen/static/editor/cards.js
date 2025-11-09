@@ -71,19 +71,44 @@ export function createCardElement(cardData) {
   newCard.dataset.cardBackgroundImageIndex = cardData.cardBackgroundImageIndex;
   newCard.className = "card";
 
-  const background = document.createElement("img");
-  background.className = "card-background";
+  const topRow = document.createElement("div");
+  topRow.className = "card-top-row";
 
-  background.src =
-    imageUrls[cardData.cardType][cardData.cardBackgroundImageIndex];
-  newCard.appendChild(background);
+  const nameElement = document.createElement("span");
+  nameElement.className = "card-name";
+  nameElement.textContent = cardData.cardName;
+  topRow.appendChild(nameElement);
 
   const deleteButton = document.createElement("a");
   deleteButton.className = "card-delete";
-  deleteButton.textContent = "Törlés";
+  deleteButton.innerHTML = "<img src='/static/kepek/kiskuka.png' alt='Törlés' />";
   deleteButton.addEventListener("click", () =>
     deleteCardClick(newCard, deckCard, cardData.cardName)
   );
+  topRow.appendChild(deleteButton);
+  newCard.appendChild(topRow);
+
+
+  const background = document.createElement("img");
+  background.src =
+    imageUrls[cardData.cardType][cardData.cardBackgroundImageIndex];
+  background.className = "card-picture";
+  newCard.appendChild(background);
+
+  const info = document.createElement("div");
+  info.className = "card-info";
+  
+  const hpElement = document.createElement("span");
+  hpElement.className = "card-hp";
+  hpElement.textContent = `${cardData.cardHp}`;
+  info.appendChild(hpElement);
+
+  const dmgElement = document.createElement("span");
+  dmgElement.className = "card-dmg";
+  dmgElement.textContent = `${cardData.cardDmg}`;
+  info.appendChild(dmgElement);
+
+  newCard.appendChild(info);
 
   const deckCard = newCard.cloneNode(true);
 
@@ -91,7 +116,6 @@ export function createCardElement(cardData) {
     deckCard.classList.toggle("active-card");
   });
 
-  newCard.appendChild(deleteButton);
   worldCardsContainer.appendChild(newCard);
 
   deckTabContainer.appendChild(deckCard);

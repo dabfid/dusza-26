@@ -1,0 +1,97 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}" />
+
+<style>
+  /* Konténer középre */
+  .difficulty-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    padding: 40px 0;
+  }
+
+  /* Fektetett kártya, kisebb magasság, kockás sarkok */
+  .difficulty-card {
+    width: 45vw;                /* képernyő szélessége fele */
+    height: calc(50vw * 0.18);  /* kisebb magasság, lapos */
+    border-radius: 0;            /* kockás sarkok */
+    overflow: hidden;           /* kép ne lógjon ki */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;     /* kitölti a kártyát */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .difficulty-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+
+  /* Háttérképek */
+  .difficulty-card-1 { background-image: url("{% static 'kepek/k3.png' %}"); }
+  .difficulty-card-2 { background-image: url("{% static 'kepek/k2.png' %}"); }
+  .difficulty-card-3 { background-image: url("{% static 'kepek/k1.png' %}"); }
+
+  /* Szöveg a kártya közepén */
+  .title {
+    background: rgba(0,0,0,0.45);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 0;          /* kockás sarkok */
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* Mobilnézet */
+  @media (max-width: 768px) {
+    .difficulty-card {
+      width: 90vw;
+      height: calc(90vw * 0.18);
+    }
+
+    .title {
+      font-size: 1.4rem;
+      padding: 10px 20px;
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="difficulty-container">
+    <form method="POST" action="{% url 'dif' world_id %}">
+      {% csrf_token %}
+      <input type="hidden" name="difficulty" value="0">
+      <button type="submit" class="difficulty-card difficulty-card-1">
+        <div class="title">Könnyű</div>
+      </button>
+    </form>
+
+    <form method="POST" action="{% url 'dif' world_id %}">
+      {% csrf_token %}
+      <input type="hidden" name="difficulty" value="1">
+      <button type="submit" class="difficulty-card difficulty-card-2">
+        <div class="title">Közepes</div>
+      </button>
+    </form>
+
+    <form method="POST" action="{% url 'dif' world_id %}">
+      {% csrf_token %}
+      <input type="hidden" name="difficulty" value="2">
+      <button type="submit" class="difficulty-card difficulty-card-3">
+        <div class="title">Nehéz</div>
+      </button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

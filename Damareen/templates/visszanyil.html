@@ -1,4 +1,6 @@
-{% extends "main.html" %} {% load static %} {% block content %}
+{% extends "main.html" %} 
+{% load static %} 
+{% block content %}
 <div class="container">
   <div class="pixel-corner pixel-corner-tl"></div>
   <div class="pixel-corner pixel-corner-tr"></div>
@@ -6,7 +8,7 @@
   <div class="pixel-corner pixel-corner-br"></div>
 
   <div class="arrow-container">
-    <a href="/">
+    <a href="{% block back_url %}/{% endblock %}">
       <img
         src="{% static 'kepek/nyilacska.png' %}"
         alt="Vissza"
@@ -17,9 +19,12 @@
   
   <h1 class="title">
       <img class="minikep" src="{% static 'kepek/szivecske.png' %}" alt="" />
-      <span class="title-text">{% block title %}{% endblock %}</span>
+      <span class="title-text">DAMAREEN</span>
       <img class="minikep" src="{% static 'kepek/harcrafel.png' %}" alt="" />
   </h1>
+  <div class="separator"><img src="{% static 'kepek/separator.png' %}" alt=""></div>
+
+  {% block title %}{% endblock %}
 
   {% block tobbi_content %}{% endblock %}
 </div>

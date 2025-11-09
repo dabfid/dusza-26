@@ -1,3 +1,5 @@
+const newCard = document.createElement("div");
+
 const newChallengeButton = document.querySelector(".diff-button");
 const deleteButtons = document.querySelectorAll(".delete-button");
 
@@ -10,7 +12,7 @@ const worldCardContainer = document.querySelector(
   "#world_cards .card-container"
 );
 
-let selectedCards = {};
+let selectedCards = [];
 
 const getFromDiff = {
   0: 1,
@@ -36,7 +38,7 @@ function setActiveButton(thisBtn, otherBtn) {
 }
 
 newChallengeButton.addEventListener("click", async () => {
-  selectedCards = {};
+  selectedCards = [];
   newChallengeButton.removeEventListener("click", this);
 
   const selectedDifficulty = difficultySelector.value;
@@ -58,7 +60,9 @@ newChallengeButton.addEventListener("click", async () => {
     }
   }
 
-  availableCards.forEach((card) => card.childNodes[0].remove());
+  availableCards.forEach((card) =>
+    card.querySelectorAll("a").forEach((btn) => btn.remove())
+  );
 
   availableCards.forEach((card) => {
     card.addEventListener("click", () => {
@@ -66,11 +70,13 @@ newChallengeButton.addEventListener("click", async () => {
       if (card.classList.contains("active-card")) {
         card.classList.remove("active-card");
 
-        delete selectedCards[cardName];
+        selectedCards = selectedCards.filter(
+          (c) => c.dataset.cardName !== cardName
+        );
       } else {
         card.classList.add("active-card");
 
-        selectedCards[cardName] = card;
+        selectedCards.push(card);
       }
     });
   });
@@ -126,7 +132,7 @@ newChallengeButton.addEventListener("click", async () => {
     }
   }
 
-  createKazameta(challengesTab, selectedDifficulty, buff, selectedCards);
+  createKazameta(selectedDifficulty, buff, selectedCards);
   cardSelector.remove();
   selectedAmountText.remove();
   if (selectedDifficulty != 0) {
@@ -143,11 +149,12 @@ deleteButtons.forEach((btn) => {
   });
 });
 
-export function createKazameta(parent, difficulty, buff, cards) {
+export function createKazameta(difficulty, buff, cards) {
   let newCards = [];
   const wrap = document.createElement("div");
   wrap.className = "kazameta-wrap";
   wrap.dataset.difficulty = difficulty;
+  wrap.dataset.buff = buff;
 
   const container = document.createElement("div");
   container.className = "kazameta-container";
@@ -171,7 +178,15 @@ export function createKazameta(parent, difficulty, buff, cards) {
     }
   } else {
     Array.from(Object.values(cards)).forEach((card) => {
-      const newCard = card.cloneNode(true);
+      let newCard;
+      if (card instanceof HTMLElement) {
+        newCard = card.cloneNode(true);
+      } else {
+        newCard = worldCardContainer
+          .querySelector(`.card[data-card-name='${card.cardName}']`)
+          .cloneNode(true);
+        newCard.querySelectorAll("a").forEach((btn) => btn.remove());
+      }
       container.appendChild(newCard);
       newCard.className = "card-small";
       newCards.push(newCard);
@@ -192,7 +207,7 @@ export function createKazameta(parent, difficulty, buff, cards) {
   wrap.appendChild(container);
   wrap.appendChild(deleteButton);
 
-  parent.appendChild(wrap);
+  challengesTab.appendChild(wrap);
 
   return wrap;
 }
@@ -202,10 +217,16 @@ export function gatherChallengeData() {
   const challengeWraps = document.querySelectorAll(".kazameta-wrap");
   challengeWraps.forEach((wrap) => {
     let cards = [];
-    Array.from(wrap.querySelectorAll("div")).forEach((card) => {
+    Array.from(
+      wrap.querySelector(".kazameta-container").querySelectorAll("div")
+    ).forEach((card) => {
       cards.push({ ...card.dataset });
     });
-    challenges.push({ ...wrap.dataset, ...cards });
+    challenges.push({
+      difficulty: wrap.dataset.difficulty,
+      buff: wrap.dataset.buff,
+      cards: cards,
+    });
   });
   return challenges;
 }

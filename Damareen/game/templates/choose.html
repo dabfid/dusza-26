@@ -1,91 +1,61 @@
-{% extends "visszanyil.html" %}
-{% load static %}
+{% extends "visszanyil.html" %} {% load static %} {% block title %}
+<h2>Válassz karaktert</h2>
+{% endblock %} {% block tobbi_content %}
 
-{% block title %}Válassz karaktert{% endblock %}
-{% block tobbi_content %}
+<link rel="stylesheet" href="{% static 'game/cards.css' %}" />
 
-<form id="chooseForm" method="post">
+{% if messages %}
+<div class="messages">
+  {% for message in messages %}
+  <div><p class="messages">{{ message }}</p></div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<form id="choose-form" method="post">
   {% csrf_token %}
-  <input type="hidden" name="characters" id="characters_input" value="[]">
+  <input type="hidden" name="characters" id="characters_input" value="[]" />
 
   <div class="saves-list">
     {% for char in characters %}
-    <div class="game-container save-box char-item"
-         data-name="{{ char.name }}"
-         data-type="{{ char.type }}"
-         data-dmg="{{ char.damage }}"  {# változott: damage -> dmg #}
-         data-hp="{{ char.hp }}">
-      <div class="save-content">
-        <div class="save-info">
-          <div class="game-id">Név: {{ char.name }}</div>
-          <div class="game-id">Típus: {{ char.type }}</div>
-          <div class="game-id">HP: {{ char.hp }}</div>
-          <div class="game-id">Sebzés: {{ char.damage }}</div>
-        </div>
-      </div>
-    </div>
+    <div
+      class="game-container save-box char-item card-data"
+      style="display: none"
+      data-name="{{ char.name }}"
+      data-type="{{ char.type }}"
+      data-dmg="{{ char.damage }}"
+      data-hp="{{ char.hp }}"
+      data-img="{{ char.imgIndex }}"
+    ></div>
+    <div class="card-container" id="card-container"></div>
     {% endfor %}
   </div>
 
-  <div style="margin-top:12px">
-    <button type="submit" class="btn">Játék indítása</button>
-    <span id="selected_count" style="margin-left:12px">Kiválasztva: 0</span>
+  <div style="margin-top: 12px">
+    <button type="submit" class="btn disabled-button" id="submit-cards">
+      Játék indítása
+    </button>
+    <span id="selected_count" style="margin-left: 12px">Kiválasztva: 0</span>
   </div>
 </form>
 
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-  const characters = [];
-  const input = document.getElementById('characters_input');
-  const countEl = document.getElementById('selected_count');
+{% if image_urls %}
+<div
+  style="display: none"
+  data-image-urls="{{ image_urls }}"
+  id="url-data"
+></div>
+{% endif %}
+<div
+  style="display: none"
+  data-challenge-difficulty="{{ difficulty }}"
+  id="difficulty-data"
+></div>
+<div
+  style="display: none"
+  data-challenge-id="{{ selected_challenge }}"
+  id="selected-challenge-data"
+></div>
 
-  function tryParseValue(val) {
-    if (val === undefined) return val;
-    if (val === 'true') return true;
-    if (val === 'false') return false;
-    if (!isNaN(val) && val.trim() !== '') {
-      return Number(val);  // fontos: számként küldjük
-    }
-    try {
-      return JSON.parse(val);
-    } catch (e) {
-      return val;
-    }
-  }
-
-  function datasetToObject(dataset) {
-    return {
-      name: dataset.name,
-      type: dataset.type,
-      dmg: tryParseValue(dataset.dmg),  // damage helyett dmg
-      hp: tryParseValue(dataset.hp)
-    };
-  }
-
-  function updateInput(){
-    input.value = JSON.stringify(characters);
-    countEl.textContent = 'Kiválasztva: ' + characters.length;
-  }
-
-  document.querySelectorAll('.char-item').forEach(function(el){
-    el.addEventListener('click', function(e){
-      const obj = datasetToObject(this.dataset);
-      if (!obj || !obj.name) return;
-
-      const idx = characters.findIndex(c => c.name === obj.name);
-      if (idx === -1) {
-        characters.push(obj);
-        this.classList.add('selected');
-      } else {
-        characters.splice(idx, 1);
-        this.classList.remove('selected');
-      }
-      updateInput();
-    });
-  });
-
-  updateInput();
-});
-</script>
-
+<script src="{% static 'game/choose_cards.js' %}"></script>
 {% endblock %}

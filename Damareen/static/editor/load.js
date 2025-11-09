@@ -22,7 +22,11 @@ function loadCardData(cardData) {
   }
 }
 // TODO save kazamatak, load kazamatak as images instead of div
-function loadChallengeData(challengeData) {}
+function loadChallengeData(challengeData) {
+  for (const challenge of challengeData) {
+    createKazameta(challenge.difficulty, challenge.buff, challenge.cards);
+  }
+}
 
 if (world) {
   const worldName = world.dataset.worldName;

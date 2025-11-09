@@ -1,74 +1,94 @@
+{% extends "visszanyil.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static '/editor/style.css' %}" />
-    <title>Editor</title>
-  </head>
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'editor/editor.css' %}" />
+{% endblock %}
+{% block extra_body %}
+<script type="module" src="{% static 'editor/cards.js' %}"></script>
+<script type="module" src="{% static 'editor/challenges.js' %}"></script>
+<script type="module" src="{% static 'editor/network.js' %}"></script>
+<script type="module" src="{% static 'editor/nav.js' %}"></script>
+<script type="module" src="{% static 'editor/load.js' %}"></script>
+{% endblock %}
+{% block back_url %}{% url 'index' %}{% endblock %}
 
-  <body>
-    {{ image_urls}}
-    <a
-      href="{% url 'index' %}"
-      class="no-deco button back-button"
-      id="back-button"
-      >Vissza</a
-    >
-    <a class="button done-button" id="done-button">Kész</a>
-    <input type="text" placeholder="Pályanév" id="world-name" />
-    <div class="nav">
-      <a class="tab-button active" data-tab="world_cards">Világkártyák</a>
-      <a class="tab-button" data-tab="deck">Gyüjtemény</a>
-      <a class="tab-button" data-tab="challenges">Kazamaták</a>
-    </div>
-    <div class="tab-content" id="world_cards">
-      <a class="button new-card-button" id="new-card-button">Új kártya</a>
-      <input type="text" name="new-card-name" id="new-card-name" />
-      <input type="number" name="new-card-dmg" id="new-card-dmg" />
-      <input type="number" name="new-card-hp" id="new-card-hp" />
-      <select name="new-card-type" id="new-card-type">
-        <option value="0">Föld</option>
-        <option value="1">Víz</option>
-        <option value="2">Tűz</option>
-        <option value="3">Levegő</option>
-      </select>
-      <div class="card-container"></div>
-    </div>
-    <div class="tab-content hidden" id="deck">
-      <div class="card-container"></div>
-    </div>
-    <div class="tab-content hidden" id="challenges">
-      <div>
-        <select name="diff-type" id="diff-type">
-          <option value="0">Egyszerű találkozás</option>
-          <option value="1">Kis kazamata</option>
-          <option value="2">Nagy kazamata</option>
-        </select>
-        <a class="button diff-button">Új kazamata</a>
-        <input type="text" name="boss-name-input" id="boss-name-input" />
+{% block tobbi_content %}
+<div class="form-group">
+  <label for="world-name">Világod neve</label>
+  <div class="input-wrapper">
+    <input type="text" placeholder="Pályanév" id="world-name" class="input-box" />
+    <div class="focus-effect"></div>
+  </div>
+</div>
+
+<div class="nav">
+  <a class="tab-button active" data-tab="world_cards">Világkártyák</a>
+  <a class="tab-button" data-tab="deck">Gyűjtemény</a>
+  <a class="tab-button" data-tab="challenges">Kazamaták</a>
+</div>
+<div class="tab-content" id="world_cards">
+  <div class="new-card-form-container">
+
+    <div class="form-group">
+      <label for="new-card-name">Kártya neve</label>
+      <div class="input-wrapper">
+        <input type="text" name="new-card-name" id="new-card-name" class="input-box" placeholder="Cicafarok" required />
       </div>
     </div>
-    {% if world %}
-    <div
-      style="display: none"
-      data-world-id="{{ world.id }}"
-      data-world-name="{{ world.name }}"
-      data-level-data="{{ world.level_data }}"
-      id="world"
-    ></div>
-    {% endif %} {% if image_urls %}
-    <div
-      style="display: none"
-      data-image-urls="{{ image_urls }}"
-      id="url-data"
-    ></div>
-    {% endif %}
-    <script type="module" src="{% static 'editor/cards.js' %}"></script>
-    <script type="module" src="{% static 'editor/challenges.js' %}"></script>
-    <script type="module" src="{% static 'editor/network.js' %}"></script>
-    <script type="module" src="{% static 'editor/nav.js' %}"></script>
-    <script type="module" src="{% static 'editor/load.js' %}"></script>
-  </body>
-</html>
+
+    <div class="form-group">
+      <label for="new-card-dmg">Sebzés</label>
+      <div class="input-wrapper">
+        <input type="number" name="new-card-dmg" id="new-card-dmg" class="input-box" min="0" max="100" value="1" required />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="new-card-hp">Életerő</label>
+      <div class="input-wrapper">
+        <input type="number" name="new-card-hp" id="new-card-hp" class="input-box" min="0" max="100" value="1" required />
+      </div>
+    </div>
+
+  <div class="form-group">
+      <label for="new-card-type">Típus</label>
+      <div class="input-wrapper">
+        <select name="new-card-type" id="new-card-type" class="input-box select-box">
+          <option value="0">Föld</option>
+          <option value="1">Víz</option>
+          <option value="2">Tűz</option>
+          <option value="3">Levegő</option>
+        </select>
+        <div class="focus-effect"></div>
+      </div>
+    </div>
+
+    <button class="button new-card-button" id="new-card-button">Új kártya mentése</button>
+  </div>
+
+
+    <div class="card-container"></div>
+  </div>
+  <div class="tab-content hidden" id="deck">
+    <div class="card-container"></div>
+  </div>
+  <div class="tab-content hidden" id="challenges">
+    <div>
+      <select name="diff-type" id="diff-type">
+        <option value="0">Egyszerű találkozás</option>
+        <option value="1">Kis kazamata</option>
+        <option value="2">Nagy kazamata</option>
+      </select>
+      <a class="button diff-button">Új kazamata</a>
+      <input type="text" name="boss-name-input" id="boss-name-input" />
+    </div>
+  </div>
+  {% if world %}
+  <div style="display: none" data-world-id="{{ world.id }}" data-world-name="{{ world.name }}"
+    data-level-data="{{ world.level_data }}" id="world"></div>
+  {% endif %} {% if image_urls %}
+  <div style="display: none" data-image-urls="{{ image_urls }}" id="url-data"></div>
+  {% endif %}
+  <button class="button done-button" id="done-button">Világ mentése</button>
+
+  {% endblock %}

@@ -1,29 +1,21 @@
-{% extends "visszanyil.html" %} {% load static %}
-<!---->
-{% block title%}DAMAREEN{%endblock %} {% block tobbi_content %}
+{% extends "visszanyil.html" %}
+{% load static %}
+{% block title%}<h2>Világaid</h2>{%endblock %}
 
-<h2 class="mentes">Saját pályáid</h2>
+{% block tobbi_content %}
 <div class="saves-list">
   {% for world in worlds %}
-<div
-  class="game-container save-box"
-  style="cursor: pointer"
-  data-world-id="{{ world.id }}"
->
-  <div class="save-content">
-    <div class="game-id">{{ world.name }}</div>
-    <a href="{% url 'worlds_delete' world.id %}">
-      <img
-        src="{% static 'kepek/kuka.png' %}"
-        alt="Törlés"
-        class="delete-icon"
-      />
-    </a>
+  <div class="game-container save-box" style="cursor: pointer" data-world-id="{{ world.id }}">
+    <div class="save-content">
+      <div class="game-id">{{ world.name }}</div>
+      <a href="{% url 'worlds_delete' world.id %}">
+        <img src="{% static 'kepek/kuka.png' %}" alt="Törlés" class="delete-icon" />
+      </a>
+    </div>
   </div>
-</div>
-{% empty %}
-<h3 class="mentes">Nincs létrehozva világ.</h3>
-{% endfor %}
+  {% empty %}
+  <h3>Nincs létrehozva világ.</h3>
+  {% endfor %}
 </div>
 
 

@@ -1,9 +1,8 @@
-{% extends "visszanyil.html" %} {% load static %} {% block title %}DAMAREEN{% endblock %}{% block tobbi_content %}
+{% extends "visszanyil.html" %} 
+{% load static %} 
+{% block title %}<h2>Korábbi játékaid</h2>{% endblock %}
+{% block tobbi_content %}
 
-
-<h2 class="mentes">Mentések</h2>
-
-  
   <div class="saves-list">
     {% for save in saves %}
     <a href="#">
@@ -20,7 +19,7 @@
     </div>
     </a>
     {% empty %}
-    <h3 class="mentes">Még nem játszott egy játékkal sem.</h3>
+    <h3>Itt folytathatod majd a megkezdett játékaidat.</h3>
     {% endfor %}
   </div>
 
