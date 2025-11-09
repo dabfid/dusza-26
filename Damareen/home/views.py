@@ -72,7 +72,7 @@ def register(request):
                 return render(request, 'register.html')
 
             user = User.objects.create_user(username=username, password=password)
-            user = Profile.objects.create(user=user, isJatekmeste=False)
+            user = Profile.objects.create(user=user, isJatekmester=False)
             user = authenticate(request, username=username, password=password)
             
             if user is not None:

@@ -36,6 +36,8 @@
       data-type="{{ char.type }}" data-dmg="{{ char.damage }}" data-hp="{{ char.hp }}" data-img="{{ char.imgIndex }}">
     </div>
     <div class="card-container" id="card-container"></div>
+    {% empty %}
+    <p style="text-align: center;">Nincsenek kártyák. Értesítsd a játékmestert!</p>
     {% endfor %}
   </div>
 
